@@ -1,0 +1,17 @@
+[
+  {
+    "name_pl": "autonomia",
+    "category": "Autonomia",
+    "sort_order": 1
+  },
+  {
+    "name_pl": "wolność wyboru",
+    "category": "Autonomia",
+    "sort_order": 2
+  },
+  {
+    "name_pl": "zrozumienie",
+    "category": "Komunikacja",
+    "sort_order": 3
+  }
+]

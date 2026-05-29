@@ -1,0 +1,20 @@
+[
+  {
+    "name_pl": "radosny",
+    "category": "fulfilled",
+    "subcategory": "Radość",
+    "sort_order": 1
+  },
+  {
+    "name_pl": "zadowolony",
+    "category": "fulfilled",
+    "subcategory": "Radość",
+    "sort_order": 2
+  },
+  {
+    "name_pl": "zmartwiony",
+    "category": "unfulfilled",
+    "subcategory": "Zmartwienie",
+    "sort_order": 3
+  }
+]
