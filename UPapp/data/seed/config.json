@@ -1,0 +1,24 @@
+[
+  {
+    "ConfigKey": "app_version",
+    "Value": "1.0.0",
+    "LastModified": "2026-06-02T12:00:00Z",
+    "ModifiedBy": "system"
+  },
+  {
+    "ConfigKey": "maintenance_mode",
+    "Value": false,
+    "LastModified": "2026-06-02T12:00:00Z",
+    "ModifiedBy": "system"
+  },
+  {
+    "ConfigKey": "feature_flags",
+    "Value": {
+      "google_oauth": false,
+      "magic_link": false,
+      "admin_panel": false
+    },
+    "LastModified": "2026-06-02T12:00:00Z",
+    "ModifiedBy": "system"
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bash .specify/extensions/git/scripts/bash/initialize-repo.sh)",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(bash .specify/extensions/git/scripts/bash/auto-commit.sh after_constitution)",
+      "Bash(bash *)",
+      "PowerShell(.specify/scripts/powershell/setup-plan.ps1 -Json)",
+      "PowerShell(.specify/scripts/powershell/setup-tasks.ps1 -Json)",
+      "PowerShell(.specify/scripts/powershell/check-prerequisites.ps1 -Json -RequireTasks -IncludeTasks)",
+      "Bash(mkdir -p .husky)",
+      "Bash(echo '#!/usr/bin/env sh *)",
+      "Bash(chmod +x .husky/pre-commit)",
+      "Bash(chmod +x *)",
+      "PowerShell(php -m | Select-String \"zip\")",
+      "PowerShell(npm install *)"
+    ]
+  }
+}

@@ -1,22 +1,49 @@
 {
   "name": "upapp",
   "version": "1.0.0",
-  "description": "NVC Forms Management Application",
+  "description": "NVC Forms Application",
   "private": true,
-  "workspaces": [
-    "frontend"
-  ],
   "scripts": {
-    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
-    "dev:backend": "cd backend && /c/xampp/php/php.exe -S localhost:8080 -t public",
-    "dev:frontend": "cd frontend && npm run dev",
+    "gui": "cd frontend && npm run dev",
+    "backend": "php -S localhost:8080 -t backend/public",
+    "db:sync": "node scripts/detect-platform.js db:sync",
+    "db:seed": "node scripts/detect-platform.js db:seed",
+    "test": "npm run test:frontend && npm run test:backend",
+    "test:frontend": "cd frontend && npm run test",
+    "test:backend": "cd backend && composer test",
+    "test:watch": "cd frontend && npm run test:watch",
+    "test:coverage": "cd frontend && npm run test:coverage",
+    "lint": "npm run lint:frontend && npm run lint:backend",
+    "lint:frontend": "cd frontend && npm run lint",
+    "lint:backend": "cd backend && composer lint",
+    "lint:fix": "cd frontend && npm run lint:fix",
+    "format": "cd frontend && npm run format",
     "build": "cd frontend && npm run build",
-    "gui": "python scripts/gui/launcher.py",
-    "db:create": "bash scripts/dynamodb/create-tables.sh dev",
-    "db:seed": "/c/xampp/php/php.exe scripts/dynamodb/seed-data.php",
-    "deploy": "node scripts/deploy/sftp-upload.js"
+    "deploy": "node scripts/deploy.js",
+    "commit:no-verify": "git commit --no-verify"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/upapp"
+  },
+  "keywords": [
+    "nvc",
+    "nonviolent-communication",
+    "forms"
+  ],
+  "author": "",
+  "license": "ISC",
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "husky": "^8.0.0",
+    "lint-staged": "^15.0.0"
+  },
+  "lint-staged": {
+    "frontend/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "backend/**/*.php": [
+      "cd backend && composer lint:fix"
+    ]
   }
 }
