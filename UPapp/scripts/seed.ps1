@@ -7,8 +7,14 @@ if (Test-Path .env) {
     Get-Content .env | ForEach-Object {
         if ($_ -match '^([^#][^=]+)=(.*)$') {
             $name = $matches[1].Trim()
-            $value = $matches[2].Trim()
-            [Environment]::SetEnvironmentVariable($name, $value, 'Process')
+            $rawValue = $matches[2]
+            # Strip inline comments (everything after #)
+            if ($rawValue -match '^([^#]*)') {
+                $value = $matches[1].Trim()
+                if ($value) {
+                    [Environment]::SetEnvironmentVariable($name, $value, 'Process')
+                }
+            }
         }
     }
 } else {
@@ -46,18 +52,28 @@ function Seed-DynamoDBTable {
         }
 
         $itemJson = $dynamoItem | ConvertTo-Json -Compress -Depth 10
-        aws dynamodb put-item `
-            --table-name $TableName `
-            --item $itemJson `
-            --region $REGION `
-            --return-values NONE 2>$null
+        $tempFile = [System.IO.Path]::GetTempFileName()
+        $itemJson | Out-File -FilePath $tempFile -Encoding utf8 -NoNewline
 
-        if ($LASTEXITCODE -eq 0) {
-            $count++
+        Write-Host "[DEBUG] Temp file: $tempFile"
+        Write-Host "[DEBUG] Content: $(Get-Content $tempFile)"
+
+        try {
+            $result = & aws dynamodb put-item --table-name $TableName --item "file://$tempFile" --region $REGION --return-values NONE 2>&1
+            Write-Host "[DEBUG] AWS result: $result"
+            Write-Host "[DEBUG] Exit code: $LASTEXITCODE"
+
+            if ($LASTEXITCODE -eq 0) {
+                $count++
+            } else {
+                Write-Host "[ERROR] Failed to insert item. Exit code: $LASTEXITCODE, Error: $result"
+            }
+        } finally {
+            Remove-Item $tempFile -ErrorAction SilentlyContinue
         }
     }
 
-    Write-Host "[db:seed] ✓ Inserted $count records"
+    Write-Host "[db:seed] OK Inserted $count records"
 }
 
 # Seed config table

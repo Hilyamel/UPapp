@@ -1,83 +1,102 @@
-import { useState, useEffect } from 'react';
-import { Card } from 'primereact/card';
-import { Message } from 'primereact/message';
-import { healthCheck } from './services/api';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './store/AuthContext';
+import ErrorBoundary from './components/Common/ErrorBoundary';
+import LoadingSpinner from './components/Common/LoadingSpinner';
+import useAuth from './hooks/useAuth';
 
-interface HealthData {
-  status: string;
-  environment: string;
-  services: {
-    api: string;
-    dynamodb: string;
-  };
+// Import pages
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import DashboardPage from './pages/DashboardPage';
+import VerifyEmailPage from './pages/VerifyEmailPage';
+import FormPage from './pages/FormPage';
+import SummaryPage from './pages/SummaryPage';
+
+// Protected route wrapper
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return <LoadingSpinner message="Sprawdzanie sesji..." />;
+  }
+
+  return isAuthenticated ? <>{children}</> : <Navigate to="/login" />;
+}
+
+// Public route wrapper (redirect to dashboard if authenticated)
+function PublicRoute({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return <LoadingSpinner message="Sprawdzanie sesji..." />;
+  }
+
+  return !isAuthenticated ? <>{children}</> : <Navigate to="/dashboard" />;
+}
+
+function AppRoutes() {
+  return (
+    <Routes>
+      {/* Public routes */}
+      <Route
+        path="/login"
+        element={
+          <PublicRoute>
+            <LoginPage />
+          </PublicRoute>
+        }
+      />
+      <Route
+        path="/register"
+        element={
+          <PublicRoute>
+            <RegisterPage />
+          </PublicRoute>
+        }
+      />
+      <Route path="/verify-email" element={<VerifyEmailPage />} />
+
+      {/* Protected routes */}
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <DashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/form/:formType"
+        element={
+          <ProtectedRoute>
+            <FormPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/summary/:formId"
+        element={
+          <ProtectedRoute>
+            <SummaryPage />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Default redirect */}
+      <Route path="/" element={<Navigate to="/dashboard" />} />
+    </Routes>
+  );
 }
 
 function App() {
-  const [healthStatus, setHealthStatus] = useState<string>('checking');
-  const [healthData, setHealthData] = useState<HealthData | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const checkHealth = async () => {
-      try {
-        const response = await healthCheck();
-        if (response.success) {
-          setHealthData(response.data);
-          setHealthStatus(response.data.status);
-        }
-      } catch (err) {
-        setError('Failed to connect to backend');
-        setHealthStatus('error');
-      }
-    };
-
-    checkHealth();
-  }, []);
-
   return (
-    <div style={{ padding: '2rem' }}>
-      <Card title="UPapp - NVC Forms Application">
-        <div style={{ marginBottom: '1rem' }}>
-          <h2>Welcome to UPapp</h2>
-          <p>Nonviolent Communication (NVC) Forms Application</p>
-        </div>
-
-        {healthStatus === 'checking' && (
-          <Message severity="info" text="Checking backend connection..." />
-        )}
-
-        {healthStatus === 'healthy' && healthData && (
-          <Message
-            severity="success"
-            text={`Backend connected - Environment: ${healthData.environment}`}
-          />
-        )}
-
-        {healthStatus === 'degraded' && (
-          <Message
-            severity="warn"
-            text="Backend running but some services degraded. Check console for details."
-          />
-        )}
-
-        {healthStatus === 'error' && (
-          <Message severity="error" text={error || 'Failed to connect to backend'} />
-        )}
-
-        <div style={{ marginTop: '2rem' }}>
-          <h3>Project Status</h3>
-          <ul>
-            <li>✅ Frontend: React + Vite + TypeScript configured</li>
-            <li>✅ UI Library: PrimeReact + Font Awesome loaded</li>
-            <li>{healthData?.services.api === 'ok' ? '✅' : '⏳'} Backend: PHP + Slim</li>
-            <li>
-              {healthData?.services.dynamodb === 'ok' ? '✅' : '⏳'} Database: DynamoDB
-              connection
-            </li>
-          </ul>
-        </div>
-      </Card>
-    </div>
+    <ErrorBoundary>
+      <AuthProvider>
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
 

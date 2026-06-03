@@ -1,0 +1,477 @@
+[
+  {
+    "name_pl": "wybór",
+    "category": "Autonomia",
+    "sort_order": 1
+  },
+  {
+    "name_pl": "wolność",
+    "category": "Autonomia",
+    "sort_order": 2
+  },
+  {
+    "name_pl": "niezależność",
+    "category": "Autonomia",
+    "sort_order": 3
+  },
+  {
+    "name_pl": "wyrażanie siebie",
+    "category": "Autonomia",
+    "sort_order": 4
+  },
+  {
+    "name_pl": "przestrzeń",
+    "category": "Autonomia",
+    "sort_order": 5
+  },
+  {
+    "name_pl": "spontaniczność",
+    "category": "Autonomia",
+    "sort_order": 6
+  },
+  {
+    "name_pl": "czułość",
+    "category": "Połączenie",
+    "sort_order": 7
+  },
+  {
+    "name_pl": "docenienie",
+    "category": "Połączenie",
+    "sort_order": 8
+  },
+  {
+    "name_pl": "autentyczność",
+    "category": "Połączenie",
+    "sort_order": 9
+  },
+  {
+    "name_pl": "godność",
+    "category": "Połączenie",
+    "sort_order": 10
+  },
+  {
+    "name_pl": "sprawczość",
+    "category": "Połączenie",
+    "sort_order": 11
+  },
+  {
+    "name_pl": "poczucie własnej wartości",
+    "category": "Połączenie",
+    "sort_order": 12
+  },
+  {
+    "name_pl": "przynależność",
+    "category": "Połączenie",
+    "sort_order": 13
+  },
+  {
+    "name_pl": "opieka",
+    "category": "Połączenie",
+    "sort_order": 14
+  },
+  {
+    "name_pl": "bliskość",
+    "category": "Połączenie",
+    "sort_order": 15
+  },
+  {
+    "name_pl": "komunikacja",
+    "category": "Połączenie",
+    "sort_order": 16
+  },
+  {
+    "name_pl": "wspólnota",
+    "category": "Połączenie",
+    "sort_order": 17
+  },
+  {
+    "name_pl": "społeczność",
+    "category": "Połączenie",
+    "sort_order": 18
+  },
+  {
+    "name_pl": "towarzystwo",
+    "category": "Połączenie",
+    "sort_order": 19
+  },
+  {
+    "name_pl": "stabilność",
+    "category": "Połączenie",
+    "sort_order": 20
+  },
+  {
+    "name_pl": "wsparcie",
+    "category": "Połączenie",
+    "sort_order": 21
+  },
+  {
+    "name_pl": "zaufanie",
+    "category": "Połączenie",
+    "sort_order": 22
+  },
+  {
+    "name_pl": "rozumienie",
+    "category": "Połączenie",
+    "sort_order": 23
+  },
+  {
+    "name_pl": "dbanie o siebie",
+    "category": "Połączenie",
+    "sort_order": 24
+  },
+  {
+    "name_pl": "wzbogacanie życia",
+    "category": "Połączenie",
+    "sort_order": 25
+  },
+  {
+    "name_pl": "dzielenie się",
+    "category": "Połączenie",
+    "sort_order": 26
+  },
+  {
+    "name_pl": "bycie widzianym",
+    "category": "Połączenie",
+    "sort_order": 27
+  },
+  {
+    "name_pl": "więź",
+    "category": "Połączenie",
+    "sort_order": 28
+  },
+  {
+    "name_pl": "współpraca",
+    "category": "Połączenie",
+    "sort_order": 29
+  },
+  {
+    "name_pl": "wzajemność",
+    "category": "Połączenie",
+    "sort_order": 30
+  },
+  {
+    "name_pl": "wspólna rzeczywistość",
+    "category": "Połączenie",
+    "sort_order": 31
+  },
+  {
+    "name_pl": "empatia",
+    "category": "Połączenie",
+    "sort_order": 32
+  },
+  {
+    "name_pl": "zrozumienie",
+    "category": "Połączenie",
+    "sort_order": 33
+  },
+  {
+    "name_pl": "przyjaźń",
+    "category": "Połączenie",
+    "sort_order": 34
+  },
+  {
+    "name_pl": "włączenie",
+    "category": "Połączenie",
+    "sort_order": 35
+  },
+  {
+    "name_pl": "inspiracja",
+    "category": "Połączenie",
+    "sort_order": 36
+  },
+  {
+    "name_pl": "intymność",
+    "category": "Połączenie",
+    "sort_order": 37
+  },
+  {
+    "name_pl": "miłość",
+    "category": "Połączenie",
+    "sort_order": 38
+  },
+  {
+    "name_pl": "partnerstwo",
+    "category": "Połączenie",
+    "sort_order": 39
+  },
+  {
+    "name_pl": "szacunek",
+    "category": "Połączenie",
+    "sort_order": 40
+  },
+  {
+    "name_pl": "szacunek dla siebie",
+    "category": "Połączenie",
+    "sort_order": 41
+  },
+  {
+    "name_pl": "bezpieczeństwo",
+    "category": "Połączenie",
+    "sort_order": 42
+  },
+  {
+    "name_pl": "samoakceptacja",
+    "category": "Połączenie",
+    "sort_order": 43
+  },
+  {
+    "name_pl": "kontakt ze sobą",
+    "category": "Połączenie",
+    "sort_order": 44
+  },
+  {
+    "name_pl": "świadomość",
+    "category": "Sens",
+    "sort_order": 45
+  },
+  {
+    "name_pl": "świętowanie",
+    "category": "Sens",
+    "sort_order": 46
+  },
+  {
+    "name_pl": "wyzwanie",
+    "category": "Sens",
+    "sort_order": 47
+  },
+  {
+    "name_pl": "jasność",
+    "category": "Sens",
+    "sort_order": 48
+  },
+  {
+    "name_pl": "transparentność",
+    "category": "Sens",
+    "sort_order": 49
+  },
+  {
+    "name_pl": "kompetencja",
+    "category": "Sens",
+    "sort_order": 50
+  },
+  {
+    "name_pl": "wkład",
+    "category": "Sens",
+    "sort_order": 51
+  },
+  {
+    "name_pl": "twórczość",
+    "category": "Sens",
+    "sort_order": 52
+  },
+  {
+    "name_pl": "efektywność",
+    "category": "Sens",
+    "sort_order": 53
+  },
+  {
+    "name_pl": "skuteczność",
+    "category": "Sens",
+    "sort_order": 54
+  },
+  {
+    "name_pl": "rozwój",
+    "category": "Sens",
+    "sort_order": 55
+  },
+  {
+    "name_pl": "spójność",
+    "category": "Sens",
+    "sort_order": 56
+  },
+  {
+    "name_pl": "integralność",
+    "category": "Sens",
+    "sort_order": 57
+  },
+  {
+    "name_pl": "uczenie się",
+    "category": "Sens",
+    "sort_order": 58
+  },
+  {
+    "name_pl": "żałoba",
+    "category": "Sens",
+    "sort_order": 59
+  },
+  {
+    "name_pl": "opłakiwanie",
+    "category": "Sens",
+    "sort_order": 60
+  },
+  {
+    "name_pl": "uczestnictwo",
+    "category": "Sens",
+    "sort_order": 61
+  },
+  {
+    "name_pl": "obecność",
+    "category": "Sens",
+    "sort_order": 62
+  },
+  {
+    "name_pl": "postęp",
+    "category": "Sens",
+    "sort_order": 63
+  },
+  {
+    "name_pl": "cel",
+    "category": "Sens",
+    "sort_order": 64
+  },
+  {
+    "name_pl": "wyrażenie siebie",
+    "category": "Sens",
+    "sort_order": 65
+  },
+  {
+    "name_pl": "akceptacja",
+    "category": "Pokój / Spokój",
+    "sort_order": 66
+  },
+  {
+    "name_pl": "równowaga",
+    "category": "Pokój / Spokój",
+    "sort_order": 67
+  },
+  {
+    "name_pl": "piękno",
+    "category": "Pokój / Spokój",
+    "sort_order": 68
+  },
+  {
+    "name_pl": "łatwość",
+    "category": "Pokój / Spokój",
+    "sort_order": 69
+  },
+  {
+    "name_pl": "równość",
+    "category": "Pokój / Spokój",
+    "sort_order": 70
+  },
+  {
+    "name_pl": "sprawiedliwość",
+    "category": "Pokój / Spokój",
+    "sort_order": 71
+  },
+  {
+    "name_pl": "prostota",
+    "category": "Pokój / Spokój",
+    "sort_order": 72
+  },
+  {
+    "name_pl": "harmonia",
+    "category": "Pokój / Spokój",
+    "sort_order": 73
+  },
+  {
+    "name_pl": "nadzieja",
+    "category": "Pokój / Spokój",
+    "sort_order": 74
+  },
+  {
+    "name_pl": "porządek",
+    "category": "Pokój / Spokój",
+    "sort_order": 75
+  },
+  {
+    "name_pl": "spokój ducha",
+    "category": "Pokój / Spokój",
+    "sort_order": 76
+  },
+  {
+    "name_pl": "dobrostan emocjonalny",
+    "category": "Pokój / Spokój",
+    "sort_order": 77
+  },
+  {
+    "name_pl": "prywatność",
+    "category": "Pokój / Spokój",
+    "sort_order": 78
+  },
+  {
+    "name_pl": "powietrze",
+    "category": "Dobrostan fizyczny",
+    "sort_order": 79
+  },
+  {
+    "name_pl": "komfort",
+    "category": "Dobrostan fizyczny",
+    "sort_order": 80
+  },
+  {
+    "name_pl": "pożywienie",
+    "category": "Dobrostan fizyczny",
+    "sort_order": 81
+  },
+  {
+    "name_pl": "ruch",
+    "category": "Dobrostan fizyczny",
+    "sort_order": 82
+  },
+  {
+    "name_pl": "odpoczynek / sen",
+    "category": "Dobrostan fizyczny",
+    "sort_order": 83
+  },
+  {
+    "name_pl": "fizyczne bezpieczeństwo",
+    "category": "Dobrostan fizyczny",
+    "sort_order": 84
+  },
+  {
+    "name_pl": "schronienie",
+    "category": "Dobrostan fizyczny",
+    "sort_order": 85
+  },
+  {
+    "name_pl": "dotyk",
+    "category": "Dobrostan fizyczny",
+    "sort_order": 86
+  },
+  {
+    "name_pl": "woda",
+    "category": "Dobrostan fizyczny",
+    "sort_order": 87
+  },
+  {
+    "name_pl": "przygoda",
+    "category": "Zabawa",
+    "sort_order": 88
+  },
+  {
+    "name_pl": "ekscytacja",
+    "category": "Zabawa",
+    "sort_order": 89
+  },
+  {
+    "name_pl": "humor",
+    "category": "Zabawa",
+    "sort_order": 90
+  },
+  {
+    "name_pl": "radość",
+    "category": "Zabawa",
+    "sort_order": 91
+  },
+  {
+    "name_pl": "relaks",
+    "category": "Zabawa",
+    "sort_order": 92
+  },
+  {
+    "name_pl": "stymulacja",
+    "category": "Zabawa",
+    "sort_order": 93
+  },
+  {
+    "name_pl": "kreatywność",
+    "category": "Zabawa",
+    "sort_order": 94
+  },
+  {
+    "name_pl": "różnorodność",
+    "category": "Zabawa",
+    "sort_order": 95
+  }
+]

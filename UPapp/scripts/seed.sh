@@ -4,7 +4,14 @@ set -e
 
 # Load environment
 if [ -f .env ]; then
-    export $(cat .env | grep -v '^#' | xargs)
+    while IFS='=' read -r key value; do
+        # Skip empty lines and comments
+        [[ -z "$key" || "$key" =~ ^#.* ]] && continue
+        # Strip inline comments (everything after #)
+        value=$(echo "$value" | sed 's/#.*//' | xargs)
+        # Export if value is not empty
+        [ -n "$value" ] && export "$key=$value"
+    done < .env
 else
     echo "Error: .env file not found"
     exit 1

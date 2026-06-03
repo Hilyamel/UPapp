@@ -7,7 +7,11 @@ const apiClient: AxiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true, // Enable session cookies
 });
+
+// Set default for all axios instances
+axios.defaults.withCredentials = true;
 
 // Request interceptor
 apiClient.interceptors.request.use(
