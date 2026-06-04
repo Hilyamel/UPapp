@@ -109,6 +109,14 @@ class UserRepository
                 $item['VerificationToken'] = ['S' => $user->getVerificationToken()];
             }
 
+            if ($user->getResetToken()) {
+                $item['ResetToken'] = ['S' => $user->getResetToken()];
+            }
+
+            if ($user->getResetTokenExpiry()) {
+                $item['ResetTokenExpiry'] = ['N' => (string)$user->getResetTokenExpiry()];
+            }
+
             $this->dynamodb->putItem([
                 'TableName' => $this->tableName,
                 'Item' => $item
@@ -160,6 +168,28 @@ class UserRepository
         }
     }
 
+    public function findByResetToken(string $token): ?User
+    {
+        try {
+            $result = $this->dynamodb->scan([
+                'TableName' => $this->tableName,
+                'FilterExpression' => 'ResetToken = :token',
+                'ExpressionAttributeValues' => [
+                    ':token' => ['S' => $token]
+                ]
+            ]);
+
+            if (empty($result['Items'])) {
+                return null;
+            }
+
+            return $this->mapItemToUser($result['Items'][0]);
+        } catch (DynamoDbException $e) {
+            error_log("DynamoDB error finding user by reset token: " . $e->getMessage());
+            return null;
+        }
+    }
+
     private function mapItemToUser(array $item): User
     {
         return new User(
@@ -170,7 +200,9 @@ class UserRepository
             $item['EmailVerified']['BOOL'] ?? false,
             $item['VerificationToken']['S'] ?? null,
             $item['CreatedAt']['S'] ?? null,
-            $item['UpdatedAt']['S'] ?? null
+            $item['UpdatedAt']['S'] ?? null,
+            $item['ResetToken']['S'] ?? null,
+            isset($item['ResetTokenExpiry']['N']) ? (int)$item['ResetTokenExpiry']['N'] : null
         );
     }
 }

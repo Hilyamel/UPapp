@@ -23,6 +23,8 @@ $app->post('/api/auth/logout', [AuthHandler::class, 'logout']);
 $app->get('/api/auth/me', [AuthHandler::class, 'me']);
 $app->get('/api/auth/verify-email', [AuthHandler::class, 'verifyEmail']);
 $app->post('/api/auth/resend-verification', [AuthHandler::class, 'resendVerification']);
+$app->post('/api/auth/forgot-password', [AuthHandler::class, 'forgotPassword']);
+$app->post('/api/auth/reset-password', [AuthHandler::class, 'resetPassword']);
 $app->delete('/api/auth/account', [AuthHandler::class, 'deleteAccount']);
 
 // Form endpoints

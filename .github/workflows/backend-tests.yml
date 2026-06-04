@@ -1,0 +1,84 @@
+name: Backend Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-tests.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'backend/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        extensions: mbstring, xml, curl, json
+        coverage: none
+
+    - name: Install dependencies
+      working-directory: ./backend
+      run: composer install --prefer-dist --no-progress --no-suggest
+
+    - name: Run unit tests
+      working-directory: ./backend
+      run: |
+        php vendor/bin/phpunit tests/Unit --testdox --colors=never > test-results.txt 2>&1
+        echo "EXIT_CODE=$?" >> $GITHUB_ENV
+      continue-on-error: true
+
+    - name: Run integration tests (with API key)
+      working-directory: ./backend
+      if: ${{ secrets.ANTHROPIC_API_KEY != '' }}
+      env:
+        ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      run: |
+        php vendor/bin/phpunit tests/Integration --testdox --colors=never >> test-results.txt 2>&1
+      continue-on-error: true
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results
+        path: backend/test-results.txt
+
+    - name: Send email report
+      if: always()
+      uses: dawidd6/action-send-mail@v3
+      with:
+        server_address: ${{ secrets.SMTP_HOST }}
+        server_port: ${{ secrets.SMTP_PORT }}
+        username: ${{ secrets.SMTP_USERNAME }}
+        password: ${{ secrets.SMTP_PASSWORD }}
+        subject: "UPapp Tests - ${{ job.status }} - ${{ github.ref_name }}"
+        to: ${{ secrets.SMTP_RECIPIENT_EMAIL }}
+        from: ${{ secrets.SMTP_FROM_EMAIL }}
+        body: |
+          Repository: ${{ github.repository }}
+          Branch: ${{ github.ref_name }}
+          Commit: ${{ github.sha }}
+          Author: ${{ github.actor }}
+          Status: ${{ job.status }}
+
+          Workflow: ${{ github.workflow }}
+          Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+          Test Results:
+          ${{ steps.test.outputs.results }}
+        attachments: backend/test-results.txt
+        priority: normal
+
+    - name: Fail if tests failed
+      if: env.EXIT_CODE != '0'
+      run: exit 1

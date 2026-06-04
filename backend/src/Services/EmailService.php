@@ -119,4 +119,99 @@ Jeśli nie rejestrowałeś/aś się w UPapp, zignoruj tę wiadomość.
 © 2026 UPapp. Wszystkie prawa zastrzeżone.
 TEXT;
     }
+
+    public function sendPasswordResetEmail(string $toEmail, string $toName, string $resetToken): bool
+    {
+        try {
+            $appUrl = Environment::get('APP_URL', 'http://localhost:5173');
+            $resetLink = "$appUrl/reset-password?token=$resetToken";
+
+            $this->mailer->clearAddresses();
+            $this->mailer->addAddress($toEmail, $toName);
+            $this->mailer->isHTML(true);
+            $this->mailer->Subject = 'Reset hasła - UPapp';
+            $this->mailer->Body = $this->getPasswordResetEmailBody($toName, $resetLink);
+            $this->mailer->AltBody = $this->getPasswordResetEmailPlainText($toName, $resetLink);
+
+            $this->mailer->send();
+            return true;
+        } catch (Exception $e) {
+            error_log("Password reset email failed: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    private function getPasswordResetEmailBody(string $name, string $link): string
+    {
+        return <<<HTML
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: #4a90e2; color: white; padding: 20px; text-align: center; }
+        .content { background: #f9f9f9; padding: 30px; }
+        .button {
+            display: inline-block;
+            background: #4a90e2;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .warning { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 15px 0; }
+        .footer { text-align: center; color: #666; font-size: 12px; padding: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>UPapp - Reset hasła</h1>
+        </div>
+        <div class="content">
+            <h2>Witaj, $name!</h2>
+            <p>Otrzymaliśmy prośbę o zresetowanie hasła do Twojego konta UPapp.</p>
+            <p style="text-align: center;">
+                <a href="$link" class="button">Zresetuj hasło</a>
+            </p>
+            <p>Lub skopiuj i wklej poniższy link do przeglądarki:</p>
+            <p style="word-break: break-all; color: #666;">$link</p>
+            <div class="warning">
+                <strong>⚠️ Ważne:</strong> Link jest ważny przez 1 godzinę. Po tym czasie musisz ponownie poprosić o reset hasła.
+            </div>
+            <p><strong>Jeśli nie prosiłeś/aś o reset hasła, zignoruj tę wiadomość.</strong> Twoje hasło pozostanie bez zmian.</p>
+        </div>
+        <div class="footer">
+            <p>&copy; 2026 UPapp. Wszystkie prawa zastrzeżone.</p>
+        </div>
+    </div>
+</body>
+</html>
+HTML;
+    }
+
+    private function getPasswordResetEmailPlainText(string $name, string $link): string
+    {
+        return <<<TEXT
+UPapp - Reset hasła
+
+Witaj, $name!
+
+Otrzymaliśmy prośbę o zresetowanie hasła do Twojego konta UPapp.
+
+Kliknij poniższy link, aby ustawić nowe hasło:
+
+$link
+
+⚠️ Ważne: Link jest ważny przez 1 godzinę. Po tym czasie musisz ponownie poprosić o reset hasła.
+
+Jeśli nie prosiłeś/aś o reset hasła, zignoruj tę wiadomość. Twoje hasło pozostanie bez zmian.
+
+---
+© 2026 UPapp. Wszystkie prawa zastrzeżone.
+TEXT;
+    }
 }

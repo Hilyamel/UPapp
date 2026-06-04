@@ -261,6 +261,92 @@ class AuthHandler
         ]);
     }
 
+    public function forgotPassword(Request $request, Response $response): Response
+    {
+        $data = json_decode($request->getBody()->getContents(), true);
+
+        if (empty($data['email'])) {
+            return $this->errorResponse($response, 'Email is required', 400);
+        }
+
+        // Find user
+        $user = $this->userRepository->findByEmail($data['email']);
+
+        // Always return success (don't reveal if user exists)
+        if (!$user) {
+            return $this->successResponse($response, [
+                'message' => 'If an account exists with this email, you will receive password reset instructions.'
+            ]);
+        }
+
+        // Generate reset token (valid for 1 hour)
+        $resetToken = User::generateResetToken();
+        $expiry = time() + 3600; // 1 hour
+
+        // Update user with reset token
+        $user->setResetToken($resetToken, $expiry);
+        if (!$this->userRepository->update($user)) {
+            return $this->errorResponse($response, 'Failed to generate reset token', 500);
+        }
+
+        // Send reset email
+        $emailSent = $this->emailService->sendPasswordResetEmail(
+            $user->getEmail(),
+            $user->getFullName() ?? 'User',
+            $resetToken
+        );
+
+        if (!$emailSent) {
+            error_log("Failed to send password reset email to: " . $user->getEmail());
+        }
+
+        return $this->successResponse($response, [
+            'message' => 'If an account exists with this email, you will receive password reset instructions.'
+        ]);
+    }
+
+    public function resetPassword(Request $request, Response $response): Response
+    {
+        $data = json_decode($request->getBody()->getContents(), true);
+
+        if (empty($data['token']) || empty($data['password'])) {
+            return $this->errorResponse($response, 'Token and new password are required', 400);
+        }
+
+        if (strlen($data['password']) < 8) {
+            return $this->errorResponse($response, 'Password must be at least 8 characters', 400);
+        }
+
+        // Find user by reset token
+        $user = $this->userRepository->findByResetToken($data['token']);
+        if (!$user) {
+            return $this->errorResponse($response, 'Invalid or expired reset token', 400);
+        }
+
+        // Check if token is still valid
+        if (!$user->isResetTokenValid()) {
+            return $this->errorResponse($response, 'Reset token has expired. Please request a new one.', 400);
+        }
+
+        // Update password and clear reset token
+        $user->setPassword($data['password']);
+        $user->clearResetToken();
+
+        // Also ensure email is verified
+        if (!$user->isEmailVerified()) {
+            $user->markEmailAsVerified();
+        }
+
+        if (!$this->userRepository->update($user)) {
+            return $this->errorResponse($response, 'Failed to reset password', 500);
+        }
+
+        return $this->successResponse($response, [
+            'message' => 'Password reset successfully. You can now log in with your new password.',
+            'email' => $user->getEmail()
+        ]);
+    }
+
     private function successResponse(Response $response, $data, int $status = 200): Response
     {
         $response->getBody()->write(json_encode([

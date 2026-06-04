@@ -4,6 +4,7 @@ namespace UpApp\Handlers;
 
 use UpApp\Models\Form;
 use UpApp\Repositories\FormRepository;
+use UpApp\Services\ClaudeService;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Ramsey\Uuid\Uuid;
@@ -11,10 +12,12 @@ use Ramsey\Uuid\Uuid;
 class FormHandler
 {
     private FormRepository $formRepository;
+    private ClaudeService $claudeService;
 
     public function __construct()
     {
         $this->formRepository = new FormRepository();
+        $this->claudeService = new ClaudeService();
     }
 
     public function create(Request $request, Response $response): Response
@@ -616,13 +619,18 @@ class FormHandler
         $formType = $form->getFormType();
         $formData = $form->getFormData();
 
-        // Check if form is complete
-        $isComplete = $this->isFormComplete($formType, $formData);
-
-        if ($isComplete) {
-            return $this->generateCompleteFormResponse($formType, $formData);
-        } else {
-            return $this->generateEmpatheticQuestion($formType, $formData);
+        try {
+            // Use Claude API to generate empathetic feedback
+            return $this->claudeService->generateEmpatheticFeedback($formType, $formData);
+        } catch (\Exception $e) {
+            error_log("Failed to generate Claude feedback: " . $e->getMessage());
+            // Fallback to legacy hardcoded response
+            $isComplete = $this->isFormComplete($formType, $formData);
+            if ($isComplete) {
+                return $this->generateCompleteFormResponse($formType, $formData);
+            } else {
+                return $this->generateEmpatheticQuestion($formType, $formData);
+            }
         }
     }
 

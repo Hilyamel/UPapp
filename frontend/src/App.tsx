@@ -11,6 +11,8 @@ import DashboardPage from './pages/DashboardPage';
 import VerifyEmailPage from './pages/VerifyEmailPage';
 import FormPage from './pages/FormPage';
 import SummaryPage from './pages/SummaryPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 
 // Protected route wrapper
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -55,6 +57,15 @@ function AppRoutes() {
         }
       />
       <Route path="/verify-email" element={<VerifyEmailPage />} />
+      <Route
+        path="/forgot-password"
+        element={
+          <PublicRoute>
+            <ForgotPasswordPage />
+          </PublicRoute>
+        }
+      />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
 
       {/* Protected routes */}
       <Route

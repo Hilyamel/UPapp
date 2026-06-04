@@ -156,6 +156,12 @@ export default function LoginPage() {
         >
           {loading ? 'Logowanie...' : 'Zaloguj się'}
         </button>
+
+        <p style={{ marginTop: '15px', textAlign: 'center' }}>
+          <Link to="/forgot-password" style={{ color: '#4a90e2', textDecoration: 'none' }}>
+            Nie pamiętasz hasła?
+          </Link>
+        </p>
       </form>
 
       <p style={{ marginTop: '20px', textAlign: 'center' }}>

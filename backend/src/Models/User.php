@@ -10,6 +10,8 @@ class User
     private ?string $fullName;
     private bool $emailVerified;
     private ?string $verificationToken;
+    private ?string $resetToken;
+    private ?int $resetTokenExpiry;
     private string $createdAt;
     private string $updatedAt;
 
@@ -21,7 +23,9 @@ class User
         bool $emailVerified = false,
         ?string $verificationToken = null,
         ?string $createdAt = null,
-        ?string $updatedAt = null
+        ?string $updatedAt = null,
+        ?string $resetToken = null,
+        ?int $resetTokenExpiry = null
     ) {
         $this->id = $id;
         $this->email = $email;
@@ -29,6 +33,8 @@ class User
         $this->fullName = $fullName;
         $this->emailVerified = $emailVerified;
         $this->verificationToken = $verificationToken;
+        $this->resetToken = $resetToken;
+        $this->resetTokenExpiry = $resetTokenExpiry;
         $this->createdAt = $createdAt ?? date('Y-m-d\TH:i:s\Z');
         $this->updatedAt = $updatedAt ?? date('Y-m-d\TH:i:s\Z');
     }
@@ -109,6 +115,49 @@ class User
     }
 
     public static function generateVerificationToken(): string
+    {
+        return bin2hex(random_bytes(32));
+    }
+
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    public function getResetTokenExpiry(): ?int
+    {
+        return $this->resetTokenExpiry;
+    }
+
+    public function setResetToken(string $token, int $expiryTimestamp): void
+    {
+        $this->resetToken = $token;
+        $this->resetTokenExpiry = $expiryTimestamp;
+        $this->updatedAt = date('Y-m-d\TH:i:s\Z');
+    }
+
+    public function clearResetToken(): void
+    {
+        $this->resetToken = null;
+        $this->resetTokenExpiry = null;
+        $this->updatedAt = date('Y-m-d\TH:i:s\Z');
+    }
+
+    public function isResetTokenValid(): bool
+    {
+        if (!$this->resetToken || !$this->resetTokenExpiry) {
+            return false;
+        }
+        return time() < $this->resetTokenExpiry;
+    }
+
+    public function setPassword(string $password): void
+    {
+        $this->passwordHash = self::hashPassword($password);
+        $this->updatedAt = date('Y-m-d\TH:i:s\Z');
+    }
+
+    public static function generateResetToken(): string
     {
         return bin2hex(random_bytes(32));
     }
