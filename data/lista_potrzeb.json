@@ -1,0 +1,162 @@
+[
+  {
+    "name_pl": "autonomia",
+    "category": "Autonomia",
+    "sort_order": 1
+  },
+  {
+    "name_pl": "wybór",
+    "category": "Autonomia",
+    "sort_order": 2
+  },
+  {
+    "name_pl": "wolność",
+    "category": "Autonomia",
+    "sort_order": 3
+  },
+  {
+    "name_pl": "niezależność",
+    "category": "Autonomia",
+    "sort_order": 4
+  },
+  {
+    "name_pl": "połączenie",
+    "category": "Połączenie",
+    "sort_order": 5
+  },
+  {
+    "name_pl": "przynależność",
+    "category": "Połączenie",
+    "sort_order": 6
+  },
+  {
+    "name_pl": "akceptacja",
+    "category": "Połączenie",
+    "sort_order": 7
+  },
+  {
+    "name_pl": "zrozumienie",
+    "category": "Połączenie",
+    "sort_order": 8
+  },
+  {
+    "name_pl": "empatia",
+    "category": "Połączenie",
+    "sort_order": 9
+  },
+  {
+    "name_pl": "bezpieczeństwo",
+    "category": "Bezpieczeństwo",
+    "sort_order": 10
+  },
+  {
+    "name_pl": "stabilność",
+    "category": "Bezpieczeństwo",
+    "sort_order": 11
+  },
+  {
+    "name_pl": "ochrona",
+    "category": "Bezpieczeństwo",
+    "sort_order": 12
+  },
+  {
+    "name_pl": "wypoczynek",
+    "category": "Fizyczne",
+    "sort_order": 13
+  },
+  {
+    "name_pl": "sen",
+    "category": "Fizyczne",
+    "sort_order": 14
+  },
+  {
+    "name_pl": "jedzenie",
+    "category": "Fizyczne",
+    "sort_order": 15
+  },
+  {
+    "name_pl": "woda",
+    "category": "Fizyczne",
+    "sort_order": 16
+  },
+  {
+    "name_pl": "ruch",
+    "category": "Fizyczne",
+    "sort_order": 17
+  },
+  {
+    "name_pl": "sen",
+    "category": "Odnawianie się",
+    "sort_order": 18
+  },
+  {
+    "name_pl": "zabawa",
+    "category": "Odnawianie się",
+    "sort_order": 19
+  },
+  {
+    "name_pl": "radość",
+    "category": "Odnawianie się",
+    "sort_order": 20
+  },
+  {
+    "name_pl": "piękno",
+    "category": "Odnawianie się",
+    "sort_order": 21
+  },
+  {
+    "name_pl": "uczenie się",
+    "category": "Sens",
+    "sort_order": 22
+  },
+  {
+    "name_pl": "rozwój",
+    "category": "Sens",
+    "sort_order": 23
+  },
+  {
+    "name_pl": "twórczość",
+    "category": "Sens",
+    "sort_order": 24
+  },
+  {
+    "name_pl": "wkład",
+    "category": "Sens",
+    "sort_order": 25
+  },
+  {
+    "name_pl": "cel",
+    "category": "Sens",
+    "sort_order": 26
+  },
+  {
+    "name_pl": "szacunek",
+    "category": "Uznanie",
+    "sort_order": 27
+  },
+  {
+    "name_pl": "uznanie",
+    "category": "Uznanie",
+    "sort_order": 28
+  },
+  {
+    "name_pl": "docenianie",
+    "category": "Uznanie",
+    "sort_order": 29
+  },
+  {
+    "name_pl": "uczciwość",
+    "category": "Autentyczność",
+    "sort_order": 30
+  },
+  {
+    "name_pl": "prawda",
+    "category": "Autentyczność",
+    "sort_order": 31
+  },
+  {
+    "name_pl": "integralność",
+    "category": "Autentyczność",
+    "sort_order": 32
+  }
+]

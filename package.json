@@ -1,0 +1,49 @@
+{
+  "name": "upapp",
+  "version": "1.0.0",
+  "description": "NVC Forms Application",
+  "private": true,
+  "scripts": {
+    "gui": "cd frontend && npm run dev",
+    "backend": "php -S localhost:8080 -t backend/public",
+    "db:sync": "node scripts/detect-platform.js db:sync",
+    "db:seed": "node scripts/detect-platform.js db:seed",
+    "test": "npm run test:frontend && npm run test:backend",
+    "test:frontend": "cd frontend && npm run test",
+    "test:backend": "cd backend && composer test",
+    "test:watch": "cd frontend && npm run test:watch",
+    "test:coverage": "cd frontend && npm run test:coverage",
+    "lint": "npm run lint:frontend && npm run lint:backend",
+    "lint:frontend": "cd frontend && npm run lint",
+    "lint:backend": "cd backend && composer lint",
+    "lint:fix": "cd frontend && npm run lint:fix",
+    "format": "cd frontend && npm run format",
+    "build": "cd frontend && npm run build",
+    "deploy": "node scripts/deploy.js",
+    "commit:no-verify": "git commit --no-verify"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/upapp"
+  },
+  "keywords": [
+    "nvc",
+    "nonviolent-communication",
+    "forms"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "husky": "^8.0.0",
+    "lint-staged": "^15.0.0"
+  },
+  "lint-staged": {
+    "frontend/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "backend/**/*.php": [
+      "cd backend && composer lint:fix"
+    ]
+  }
+}
