@@ -81,16 +81,17 @@ export default function DashboardPage() {
 
       // Check if feedback already exists and user hasn't chosen to overwrite
       if (response.status === 'feedback_exists') {
+        setAiLoading(false);
+
         const shouldOverwrite = window.confirm(
-          response.message || 'Ten formularz ma już zapisany feedback AI. Czy chcesz go nadpisać nowym feedbackiem?'
+          'Ten formularz ma już feedback empAItyczny.\n\nCzy chcesz wygenerować nowy feedback?\n\n✓ TAK - wygeneruj nowy (bez uwzględnienia poprzedniego)\n✗ NIE - pozostaw obecny'
         );
 
         if (shouldOverwrite) {
-          // Retry with overwrite=true
+          // Retry with overwrite=true (generates fresh feedback without old one)
           return handleAIFeedback(e, formId, true);
         } else {
-          // Show existing feedback
-          setAiFeedback(response.existing_feedback);
+          // User chose not to overwrite - do nothing, just close
           return;
         }
       }
