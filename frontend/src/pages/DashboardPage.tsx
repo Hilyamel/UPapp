@@ -4,6 +4,19 @@ import { useAuth } from '../hooks/useAuth';
 import { listForms, deleteForm, generateAIFeedback, updateForm } from '../services/forms';
 import apiClient from '../services/api';
 
+// Deployment function
+async function triggerDeployment(): Promise<{ success: boolean; message: string }> {
+  try {
+    const response = await apiClient.post('/api/admin/deploy');
+    return response.data;
+  } catch (error: any) {
+    return {
+      success: false,
+      message: error.response?.data?.error?.message || 'Deployment failed'
+    };
+  }
+}
+
 export default function DashboardPage() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -15,6 +28,8 @@ export default function DashboardPage() {
   const [aiError, setAiError] = useState<string | null>(null);
   const [editingTitleId, setEditingTitleId] = useState<string | null>(null);
   const [editingTitleValue, setEditingTitleValue] = useState<string>('');
+  const [deployLoading, setDeployLoading] = useState(false);
+  const [deployMessage, setDeployMessage] = useState<string | null>(null);
 
   useEffect(() => {
     loadForms();
@@ -153,6 +168,28 @@ export default function DashboardPage() {
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
           <span>{user?.email}</span>
           <button
+            onClick={async () => {
+              if (!window.confirm('Czy na pewno chcesz wdrożyć aplikację na serwer produkcyjny?')) return;
+              setDeployLoading(true);
+              setDeployMessage(null);
+              const result = await triggerDeployment();
+              setDeployMessage(result.message);
+              setDeployLoading(false);
+              setTimeout(() => setDeployMessage(null), 5000);
+            }}
+            disabled={deployLoading}
+            style={{
+              padding: '8px 16px',
+              background: deployLoading ? '#ccc' : '#9c27b0',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: deployLoading ? 'not-allowed' : 'pointer'
+            }}
+          >
+            {deployLoading ? 'Wdrażanie...' : '🚀 Deploy'}
+          </button>
+          <button
             onClick={handleLogout}
             style={{
               padding: '8px 16px',
@@ -167,6 +204,20 @@ export default function DashboardPage() {
           </button>
         </div>
       </div>
+
+      {/* Deploy status message */}
+      {deployMessage && (
+        <div style={{
+          padding: '15px',
+          marginBottom: '20px',
+          background: deployMessage.includes('success') || deployMessage.includes('Success') ? '#e8f5e9' : '#ffebee',
+          color: deployMessage.includes('success') || deployMessage.includes('Success') ? '#2e7d32' : '#d32f2f',
+          borderRadius: '4px',
+          border: `1px solid ${deployMessage.includes('success') || deployMessage.includes('Success') ? '#66bb6a' : '#f44336'}`
+        }}>
+          {deployMessage}
+        </div>
+      )}
 
       {/* Quick actions */}
       <div style={{ marginBottom: '30px' }}>

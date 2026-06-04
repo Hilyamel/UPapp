@@ -9,6 +9,7 @@ use UpApp\Handlers\HealthCheckHandler;
 use UpApp\Handlers\AuthHandler;
 use UpApp\Handlers\FormHandler;
 use UpApp\Handlers\ReferenceHandler;
+use UpApp\Handlers\DeployHandler;
 
 /** @var App $app */
 
@@ -36,6 +37,10 @@ $app->post('/api/forms/{id}/ai-feedback', [FormHandler::class, 'generateAIFeedba
 // Reference data endpoints
 $app->get('/api/reference/feelings', [ReferenceHandler::class, 'getFeelings']);
 $app->get('/api/reference/needs', [ReferenceHandler::class, 'getNeeds']);
+
+// Admin/Deploy endpoints
+$app->post('/api/admin/deploy', [DeployHandler::class, 'triggerDeploy']);
+$app->get('/api/admin/deploy/status', [DeployHandler::class, 'getDeployStatus']);
 
 // Root endpoint
 $app->get('/', function (Request $request, Response $response) {
