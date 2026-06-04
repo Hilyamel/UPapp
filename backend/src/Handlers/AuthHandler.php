@@ -347,6 +347,52 @@ class AuthHandler
         ]);
     }
 
+    public function changePassword(Request $request, Response $response): Response
+    {
+        session_start();
+
+        if (empty($_SESSION['user_id'])) {
+            return $this->errorResponse($response, 'Not authenticated', 401);
+        }
+
+        $data = json_decode($request->getBody()->getContents(), true);
+
+        if (empty($data['current_password']) || empty($data['new_password'])) {
+            return $this->errorResponse($response, 'Current password and new password are required', 400);
+        }
+
+        if (strlen($data['new_password']) < 8) {
+            return $this->errorResponse($response, 'New password must be at least 8 characters', 400);
+        }
+
+        // Get user
+        $user = $this->userRepository->findById($_SESSION['user_id']);
+        if (!$user) {
+            return $this->errorResponse($response, 'User not found', 404);
+        }
+
+        // Verify current password
+        if (!$user->verifyPassword($data['current_password'])) {
+            return $this->errorResponse($response, 'Current password is incorrect', 401);
+        }
+
+        // Check if new password is different
+        if ($user->verifyPassword($data['new_password'])) {
+            return $this->errorResponse($response, 'New password must be different from current password', 400);
+        }
+
+        // Update password
+        $user->setPassword($data['new_password']);
+
+        if (!$this->userRepository->update($user)) {
+            return $this->errorResponse($response, 'Failed to change password', 500);
+        }
+
+        return $this->successResponse($response, [
+            'message' => 'Password changed successfully'
+        ]);
+    }
+
     private function successResponse(Response $response, $data, int $status = 200): Response
     {
         $response->getBody()->write(json_encode([

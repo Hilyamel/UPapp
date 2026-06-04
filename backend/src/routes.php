@@ -25,6 +25,7 @@ $app->get('/api/auth/verify-email', [AuthHandler::class, 'verifyEmail']);
 $app->post('/api/auth/resend-verification', [AuthHandler::class, 'resendVerification']);
 $app->post('/api/auth/forgot-password', [AuthHandler::class, 'forgotPassword']);
 $app->post('/api/auth/reset-password', [AuthHandler::class, 'resetPassword']);
+$app->post('/api/auth/change-password', [AuthHandler::class, 'changePassword']);
 $app->delete('/api/auth/account', [AuthHandler::class, 'deleteAccount']);
 
 // Form endpoints
