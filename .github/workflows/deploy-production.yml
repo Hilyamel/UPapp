@@ -7,6 +7,11 @@ on:
         description: 'Type "DEPLOY" to confirm deployment'
         required: true
         default: ''
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/deploy-production.yml'
 
 jobs:
   deploy:
