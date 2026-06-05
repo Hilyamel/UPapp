@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Handlers;
+namespace Tests\Integration;
 
 use PHPUnit\Framework\TestCase;
 use UpApp\Handlers\AuthHandler;
