@@ -28,10 +28,11 @@ try {
     exit(1);
 }
 
-// Configure session for CORS
-ini_set('session.cookie_samesite', 'None');
+// Configure session for CORS (local development with HTTP)
+ini_set('session.cookie_samesite', 'Lax');
 ini_set('session.cookie_secure', '0'); // Set to 1 for HTTPS
 ini_set('session.cookie_httponly', '1');
+ini_set('session.cookie_domain', 'localhost');
 
 // Create Slim app
 $app = AppFactory::create();

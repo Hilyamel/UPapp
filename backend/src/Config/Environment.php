@@ -23,7 +23,8 @@ class Environment
             return;
         }
 
-        $dotenv = Dotenv::createImmutable(dirname(__DIR__, 2));
+        // Load .env from project root (3 levels up from src/Config/)
+        $dotenv = Dotenv::createImmutable(dirname(__DIR__, 3));
         $dotenv->load();
 
         self::validate();

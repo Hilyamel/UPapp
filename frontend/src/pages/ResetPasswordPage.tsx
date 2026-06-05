@@ -12,6 +12,13 @@ export default function ResetPasswordPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  // Debug: log token on mount
+  React.useEffect(() => {
+    console.log('ResetPasswordPage mounted');
+    console.log('Token from URL:', token);
+    console.log('Full URL:', window.location.href);
+  }, [token]);
+
   if (!token) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -32,6 +39,10 @@ export default function ResetPasswordPage() {
     e.preventDefault();
     setError('');
 
+    console.log('Submitting password reset...');
+    console.log('Token:', token);
+    console.log('Password length:', password.length);
+
     // Validation
     if (password.length < 8) {
       setError('Hasło musi mieć minimum 8 znaków');
@@ -46,7 +57,7 @@ export default function ResetPasswordPage() {
     setLoading(true);
 
     try {
-      await api.post('/auth/reset-password', {
+      await api.post('/api/auth/reset-password', {
         token,
         password
       });
@@ -55,7 +66,30 @@ export default function ResetPasswordPage() {
       alert('Hasło zostało zresetowane. Możesz się teraz zalogować.');
       navigate('/login');
     } catch (err: any) {
-      setError(err.response?.data?.error?.message || 'Wystąpił błąd. Spróbuj ponownie.');
+      console.error('=== RESET PASSWORD ERROR ===');
+      console.error('Full error object:', err);
+      console.error('Error code:', err.code);
+      console.error('Error message:', err.message);
+      console.error('Response:', err.response);
+      console.error('Response status:', err.response?.status);
+      console.error('Response data:', err.response?.data);
+      console.error('Request config:', err.config);
+      console.error('============================');
+
+      // Show detailed error message
+      let errorMessage = 'Wystąpił błąd. Spróbuj ponownie.';
+
+      if (err.response?.data?.error?.message) {
+        errorMessage = err.response.data.error.message;
+      } else if (err.response?.status === 400) {
+        errorMessage = 'Nieprawidłowy token lub hasło. Sprawdź wymagania.';
+      } else if (err.response?.status === 0 || err.code === 'ERR_NETWORK') {
+        errorMessage = 'Błąd połączenia z serwerem. Sprawdź czy backend działa.';
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -69,20 +103,20 @@ export default function ResetPasswordPage() {
             Ustaw nowe hasło
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Wprowadź nowe hasło do swojego konta.
+            Wprowadź nowe hasło do swojego konta (minimum 8 znaków).
           </p>
         </div>
 
         {error && (
-          <div className="rounded-md bg-red-50 p-4">
-            <div className="flex">
+          <div className="rounded-md bg-red-50 border border-red-200 p-3">
+            <div className="flex items-start">
               <div className="flex-shrink-0">
-                <svg className="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <svg className="h-4 w-4 text-red-500 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                 </svg>
               </div>
-              <div className="ml-3">
-                <p className="text-sm font-medium text-red-800">{error}</p>
+              <div className="ml-2 flex-1">
+                <p className="text-sm text-red-700">{error}</p>
               </div>
             </div>
           </div>

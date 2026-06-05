@@ -3,11 +3,18 @@
 namespace Tests\Unit\Services;
 
 use PHPUnit\Framework\TestCase;
+use UpApp\Config\Environment;
 use UpApp\Services\ClaudeService;
 
 class ClaudeServiceTest extends TestCase
 {
     private ClaudeService $service;
+
+    public static function setUpBeforeClass(): void
+    {
+        // Load .env from project root before any tests
+        Environment::load();
+    }
 
     protected function setUp(): void
     {
@@ -24,8 +31,11 @@ class ClaudeServiceTest extends TestCase
 
         $this->assertIsString($prompt);
         $this->assertNotEmpty($prompt);
-        $this->assertStringContainsString('empAItycznie', $prompt);
-        $this->assertStringContainsString('NVC', $prompt);
+        // Validate structure per empathy-prompt.txt
+        $this->assertStringContainsString('OBSERWACJA', $prompt);
+        $this->assertStringContainsString('UCZUCIE', $prompt);
+        $this->assertStringContainsString('POTRZEBA', $prompt);
+        $this->assertStringContainsString('PYTANIE', $prompt);
     }
 
     public function testFormatTUPData(): void
@@ -95,8 +105,11 @@ class ClaudeServiceTest extends TestCase
 
     public function testFallbackResponseWhenNoApiKey(): void
     {
-        // Temporarily unset API key
-        $originalKey = getenv('ANTHROPIC_API_KEY');
+        // Temporarily unset API key from both $_ENV and getenv()
+        $originalEnvKey = $_ENV['ANTHROPIC_API_KEY'] ?? null;
+        $originalGetenvKey = getenv('ANTHROPIC_API_KEY');
+
+        unset($_ENV['ANTHROPIC_API_KEY']);
         putenv('ANTHROPIC_API_KEY=');
 
         $service = new ClaudeService();
@@ -105,9 +118,12 @@ class ClaudeServiceTest extends TestCase
             'situation_description' => 'Test'
         ]);
 
-        // Restore original key
-        if ($originalKey !== false) {
-            putenv("ANTHROPIC_API_KEY={$originalKey}");
+        // Restore original keys
+        if ($originalEnvKey !== null) {
+            $_ENV['ANTHROPIC_API_KEY'] = $originalEnvKey;
+        }
+        if ($originalGetenvKey !== false) {
+            putenv("ANTHROPIC_API_KEY={$originalGetenvKey}");
         }
 
         $this->assertIsString($result);
@@ -121,5 +137,41 @@ class ClaudeServiceTest extends TestCase
 
         $this->assertIsString($result);
         $this->assertNotEmpty($result);
+    }
+
+    /**
+     * Integration test - validates Claude API response structure
+     * Requires ANTHROPIC_API_KEY in environment
+     *
+     * @group integration
+     */
+    public function testClaudeAPIResponseStructure(): void
+    {
+        $apiKey = getenv('ANTHROPIC_API_KEY');
+        if (empty($apiKey)) {
+            $this->markTestSkipped('ANTHROPIC_API_KEY not set - skipping integration test');
+        }
+
+        $testData = [
+            'situation_description' => 'Szef nakrzyczał na mnie podczas spotkania',
+            'your_feelings_freetext' => 'złość',
+            'your_needs_freetext' => 'szacunek'
+        ];
+
+        $result = $this->service->generateEmpatheticFeedback('TUP', $testData);
+
+        // Validate response is not fallback
+        $this->assertStringNotContainsString('Dziękuję za podzielenie się', $result);
+
+        // Validate structure according to empathy-prompt.txt
+        // Response should contain questions about feelings/needs
+        $this->assertMatchesRegularExpression('/czy\s+czujesz/i', $result);
+
+        // Should mention feelings or needs
+        $hasFeelingsOrNeeds =
+            stripos($result, 'uczucie') !== false ||
+            stripos($result, 'czujesz') !== false ||
+            stripos($result, 'potrzeb') !== false;
+        $this->assertTrue($hasFeelingsOrNeeds, 'Response should mention feelings or needs');
     }
 }

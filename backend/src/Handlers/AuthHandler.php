@@ -279,9 +279,9 @@ class AuthHandler
             ]);
         }
 
-        // Generate reset token (valid for 1 hour)
+        // Generate reset token (valid for 24 hours)
         $resetToken = User::generateResetToken();
-        $expiry = time() + 3600; // 1 hour
+        $expiry = time() + 86400; // 24 hours
 
         // Update user with reset token
         $user->setResetToken($resetToken, $expiry);

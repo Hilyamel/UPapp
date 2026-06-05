@@ -14,8 +14,9 @@ class ClaudeService
 
     public function __construct()
     {
-        $this->apiKey = getenv('ANTHROPIC_API_KEY') ?: '';
-        $this->promptPath = __DIR__ . '/../../config/empathy-prompt.txt';
+        // Read from $_ENV (populated by Dotenv) or fallback to getenv()
+        $this->apiKey = $_ENV['ANTHROPIC_API_KEY'] ?? getenv('ANTHROPIC_API_KEY') ?: '';
+        $this->promptPath = __DIR__ . '/../../../empathy-prompt.txt';
 
         if (empty($this->apiKey)) {
             error_log('WARNING: ANTHROPIC_API_KEY not set in environment');

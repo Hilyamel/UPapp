@@ -180,7 +180,7 @@ TEXT;
             <p>Lub skopiuj i wklej poniższy link do przeglądarki:</p>
             <p style="word-break: break-all; color: #666;">$link</p>
             <div class="warning">
-                <strong>⚠️ Ważne:</strong> Link jest ważny przez 1 godzinę. Po tym czasie musisz ponownie poprosić o reset hasła.
+                <strong>⚠️ Ważne:</strong> Link jest ważny przez 24 godziny. Po tym czasie musisz ponownie poprosić o reset hasła.
             </div>
             <p><strong>Jeśli nie prosiłeś/aś o reset hasła, zignoruj tę wiadomość.</strong> Twoje hasło pozostanie bez zmian.</p>
         </div>
@@ -206,7 +206,7 @@ Kliknij poniższy link, aby ustawić nowe hasło:
 
 $link
 
-⚠️ Ważne: Link jest ważny przez 1 godzinę. Po tym czasie musisz ponownie poprosić o reset hasła.
+⚠️ Ważne: Link jest ważny przez 24 godziny. Po tym czasie musisz ponownie poprosić o reset hasła.
 
 Jeśli nie prosiłeś/aś o reset hasła, zignoruj tę wiadomość. Twoje hasło pozostanie bez zmian.
 

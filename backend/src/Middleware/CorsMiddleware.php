@@ -28,7 +28,22 @@ class CorsMiddleware implements MiddlewareInterface
 
     private function addCorsHeaders(ResponseInterface $response): ResponseInterface
     {
-        $allowedOrigin = Environment::get('APP_URL', 'http://localhost:5173');
+        // Support multiple development origins
+        $allowedOrigins = [
+            Environment::get('APP_URL', 'http://localhost:5173'),
+            'http://localhost:5173',
+            'http://localhost:5174',
+            'http://localhost:5175',
+            'http://localhost:3000',
+        ];
+
+        // Get Origin from request
+        $requestOrigin = $_SERVER['HTTP_ORIGIN'] ?? '';
+
+        // Use requested origin if it's in our whitelist, otherwise use default
+        $allowedOrigin = in_array($requestOrigin, $allowedOrigins, true)
+            ? $requestOrigin
+            : $allowedOrigins[0];
 
         return $response
             ->withHeader('Access-Control-Allow-Origin', $allowedOrigin)

@@ -27,7 +27,10 @@ cd backend && composer install && cd ..
 
 # Configure environment
 cp .env_dist .env
-# Edit .env with your AWS credentials
+# Edit .env with:
+# - AWS credentials
+# - ANTHROPIC_API_KEY (required for empAItycznie feature)
+#   Get your API key from: https://console.anthropic.com/settings/keys
 
 # Create DynamoDB tables
 npm run db:sync
@@ -78,6 +81,37 @@ UPapp/
 - `npm run lint` - Run linters
 - `npm run build` - Build for production
 - `npm run deploy` - Deploy to server
+
+## empAItycznie Feature
+
+The empAItycznie button uses Claude AI to provide empathetic NVC feedback on form submissions.
+
+### Configuration
+
+1. **API Key**: Add your Anthropic API key to `.env` (project root):
+   ```bash
+   ANTHROPIC_API_KEY=sk-ant-api03-...
+   ```
+   Get your key from: https://console.anthropic.com/settings/keys
+
+2. **Prompt Customization**: Edit `empathy-prompt.txt` in the UPapp root to customize AI responses. The prompt defines:
+   - Response structure (OBSERWACJA-UCZUCIE-POTRZEBA-PYTANIE)
+   - NVC feelings and needs lists
+   - Tone and emoticons
+   - Examples
+
+3. **Testing**: Run integration tests with:
+   ```bash
+   cd backend
+   vendor/bin/phpunit --group integration
+   ```
+
+### How It Works
+
+- Button click sends form data to `/api/forms/{id}/ai-feedback`
+- Backend calls Claude API with system prompt from `empathy-prompt.txt`
+- Response follows NVC "dwójka empatyczna" structure
+- If API key is missing, returns fallback message
 
 ## Documentation
 
