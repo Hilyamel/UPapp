@@ -39,11 +39,14 @@ jobs:
 
     - name: Run integration tests (with API key)
       working-directory: ./backend
-      if: ${{ secrets.ANTHROPIC_API_KEY != '' }}
       env:
         ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       run: |
-        php vendor/bin/phpunit tests/Integration --testdox --colors=never >> test-results.txt 2>&1
+        if [ -n "$ANTHROPIC_API_KEY" ]; then
+          php vendor/bin/phpunit tests/Integration --testdox --colors=never >> test-results.txt 2>&1
+        else
+          echo "Skipping integration tests - ANTHROPIC_API_KEY not set" >> test-results.txt
+        fi
       continue-on-error: true
 
     - name: Upload test results
