@@ -1,0 +1,102 @@
+name: Deploy to Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "DEPLOY" to confirm deployment'
+        required: true
+        default: ''
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.event.inputs.confirm == 'DEPLOY'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+
+    - name: Install backend dependencies
+      working-directory: ./backend
+      run: composer install --no-dev --optimize-autoloader
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install frontend dependencies
+      working-directory: ./frontend
+      run: npm ci
+
+    - name: Build frontend
+      working-directory: ./frontend
+      env:
+        VITE_API_URL: https://upapp.mindincoach.com/api
+      run: npm run build
+
+    - name: Create production .env
+      working-directory: ./backend
+      run: |
+        cat > .env << 'EOF'
+        APP_ENV=prod
+        APP_URL=https://upapp.mindincoach.com
+
+        # AWS Configuration
+        AWS_REGION=${{ secrets.AWS_REGION }}
+        AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+        # DynamoDB
+        DYNAMODB_TABLE_PREFIX=UpApp
+
+        # Backend API
+        BACKEND_URL=https://upapp.mindincoach.com
+
+        # Email Configuration
+        SMTP_HOST=${{ secrets.SMTP_HOST }}
+        SMTP_PORT=${{ secrets.SMTP_PORT }}
+        SMTP_USERNAME=${{ secrets.SMTP_USERNAME }}
+        SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}
+        SMTP_FROM_EMAIL=${{ secrets.SMTP_FROM_EMAIL }}
+        SMTP_FROM_NAME=UPapp
+
+        # Claude API
+        ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}
+        EMPATHY_PROMPT_PATH=empathy-prompt.txt
+        EOF
+
+    - name: Deploy via FTP
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.FTP_HOST }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./
+        server-dir: /
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          **/tests/**
+          **/frontend/src/**
+          **/frontend/node_modules/**
+          **/.env.example
+          **/README.md
+          **/backend/test-*.php
+          **/backend/get-*.php
+          **/backend/admin-*.php
+          **/*.log
+
+    - name: Deploy summary
+      run: |
+        echo "✅ Deployment completed successfully!"
+        echo "🌐 Site: https://upapp.mindincoach.com"
+        echo "📅 Time: $(date)"
+        echo "🔖 Commit: ${{ github.sha }}"
