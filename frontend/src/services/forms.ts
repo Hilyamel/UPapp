@@ -10,7 +10,7 @@ export interface FormData {
 export interface Form {
   id: string;
   user_id: string;
-  form_type: 'TUP' | 'DUP' | 'DOS';
+  form_type: 'TUP' | 'DUP' | 'DOS' | 'OK10';
   form_data: FormData;
   completion_status: 'draft' | 'completed';
   title?: string;
@@ -49,7 +49,7 @@ export interface SummaryColumn {
 }
 
 export interface FormFilters {
-  formType?: 'TUP' | 'DUP' | 'DOS';
+  formType?: 'TUP' | 'DUP' | 'DOS' | 'OK10';
   completionStatus?: 'draft' | 'completed';
   limit?: number;
   offset?: number;
@@ -59,7 +59,7 @@ export interface FormFilters {
  * Create a new form submission.
  */
 export async function createForm(
-  formType: 'TUP' | 'DUP' | 'DOS',
+  formType: 'TUP' | 'DUP' | 'DOS' | 'OK10',
   formData: FormData,
   completionStatus: 'draft' | 'completed' = 'draft'
 ): Promise<Form> {

@@ -50,6 +50,18 @@ class Form
             case 'DOS':
                 $text = $formData['judgment'] ?? $formData['person'] ?? '';
                 break;
+            case 'OK10':
+                // Combine "who" and "what" fields for OK10
+                $who = $formData['who'] ?? '';
+                $what = $formData['what'] ?? '';
+                if (!empty($who) && !empty($what)) {
+                    $text = $who . ' - ' . $what;
+                } elseif (!empty($who)) {
+                    $text = $who;
+                } elseif (!empty($what)) {
+                    $text = $what;
+                }
+                break;
         }
 
         if (empty($text)) {

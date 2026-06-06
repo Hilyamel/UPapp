@@ -29,7 +29,7 @@ class FormHandler
 
         $data = json_decode($request->getBody()->getContents(), true);
 
-        if (empty($data['form_type']) || !in_array($data['form_type'], ['DUP', 'TUP', 'DOS'])) {
+        if (empty($data['form_type']) || !in_array($data['form_type'], ['DUP', 'TUP', 'DOS', 'OK10'])) {
             return $this->errorResponse($response, 'Invalid form type', 400);
         }
 
@@ -253,6 +253,9 @@ class FormHandler
                 break;
             case 'DOS':
                 $summary['sections'] = $this->formatDOSSummary($formData);
+                break;
+            case 'OK10':
+                $summary['sections'] = $this->formatOK10Summary($formData);
                 break;
         }
 
@@ -588,6 +591,122 @@ class FormHandler
         return $sections;
     }
 
+    private function formatOK10Summary(array $data): array
+    {
+        $sections = [];
+
+        // Basic fields
+        $basicFields = [];
+        if (!empty($data['who'])) {
+            $basicFields[] = ['label' => 'Kto', 'value' => $data['who']];
+        }
+        if (!empty($data['what'])) {
+            $basicFields[] = ['label' => 'Co', 'value' => $data['what']];
+        }
+        if (!empty($data['thoughts_feelings'])) {
+            $basicFields[] = ['label' => 'Myśli i uczucia', 'value' => $data['thoughts_feelings']];
+        }
+
+        if (!empty($basicFields)) {
+            $sections[] = [
+                'title' => 'Sytuacja',
+                'layout' => 'single-column',
+                'fields' => $basicFields
+            ];
+        }
+
+        // NVC Feelings selected
+        if (!empty($data['feelings_nvc_selected']) && is_array($data['feelings_nvc_selected'])) {
+            $sections[] = [
+                'title' => 'Uczucia (wybrane z listy NVC)',
+                'layout' => 'single-column',
+                'fields' => [
+                    ['label' => '', 'value' => implode(', ', $data['feelings_nvc_selected'])]
+                ]
+            ];
+        }
+
+        // Violated needs
+        if (!empty($data['violated_needs'])) {
+            $needLabels = [
+                'security' => 'Poczucie bezpieczeństwa',
+                'sexual' => 'Potrzeby seksualne',
+                'social' => 'Osobiste relacje / potrzeby społeczne',
+                'ambition' => 'Ambicja / duma / prestiż'
+            ];
+            $violated = array_map(function($id) use ($needLabels) {
+                return $needLabels[$id] ?? $id;
+            }, $data['violated_needs']);
+
+            $sections[] = [
+                'title' => 'Naruszone potrzeby (4 główne)',
+                'layout' => 'single-column',
+                'fields' => [
+                    ['label' => '', 'value' => implode(', ', $violated)]
+                ]
+            ];
+        }
+
+        // Other needs text
+        if (!empty($data['other_needs'])) {
+            $sections[] = [
+                'title' => 'Inne potrzeby (własny opis)',
+                'layout' => 'single-column',
+                'fields' => [
+                    ['label' => '', 'value' => $data['other_needs']]
+                ]
+            ];
+        }
+
+        // NVC Needs selected
+        if (!empty($data['needs_nvc_selected']) && is_array($data['needs_nvc_selected'])) {
+            $sections[] = [
+                'title' => 'Potrzeby (wybrane z listy NVC)',
+                'layout' => 'single-column',
+                'fields' => [
+                    ['label' => '', 'value' => implode(', ', $data['needs_nvc_selected'])]
+                ]
+            ];
+        }
+
+        // Additional fields (6-13) - private fields not sent to AI
+        $privateFields = [];
+        if (!empty($data['flaws'])) {
+            $privateFields[] = ['label' => 'Wady', 'value' => $data['flaws']];
+        }
+        if (!empty($data['false_benefits'])) {
+            $privateFields[] = ['label' => 'Pozorne korzyści (błędne przekonania)', 'value' => $data['false_benefits']];
+        }
+        if (!empty($data['evident_losses'])) {
+            $privateFields[] = ['label' => 'Ewidentne straty', 'value' => $data['evident_losses']];
+        }
+        if (!empty($data['what_should_be'])) {
+            $privateFields[] = ['label' => 'Co powinno być (zalety)', 'value' => $data['what_should_be']];
+        }
+        if (!empty($data['harms_against_me'])) {
+            $privateFields[] = ['label' => 'Krzywdy - wobec mnie (kr 8.5)', 'value' => $data['harms_against_me']];
+        }
+        if (!empty($data['mine_toward_others'])) {
+            $privateFields[] = ['label' => 'Moje wobec otoczenia', 'value' => $data['mine_toward_others']];
+        }
+        if (!empty($data['forgiveness_decision'])) {
+            $privateFields[] = ['label' => 'Decyzja o wybaczeniu / próbie pojednania', 'value' => $data['forgiveness_decision']];
+        }
+        if (!empty($data['attitude_changes'])) {
+            $privateFields[] = ['label' => 'Zmiany postawy pod wpływem zalet, w kierunku miłości', 'value' => $data['attitude_changes']];
+        }
+
+        if (!empty($privateFields)) {
+            $sections[] = [
+                'title' => 'Dalsza praca (pola prywatne)',
+                'layout' => 'single-column',
+                'fields' => $privateFields
+            ];
+        }
+
+        return $sections;
+    }
+
     private function collectSelectedItems(array $data, string $prefix): string
     {
         $items = [];
@@ -653,6 +772,11 @@ class FormHandler
                     && $this->hasSelectedItems($formData, 'feeling')
                     && $this->hasSelectedItems($formData, 'need');
 
+            case 'OK10':
+                return !empty($formData['who'])
+                    && !empty($formData['what'])
+                    && !empty($formData['thoughts_feelings']);
+
             default:
                 return false;
         }
@@ -716,6 +840,10 @@ class FormHandler
                 return $formData['what_someone_said'] ?? 'tę sytuację';
             case 'DOS':
                 return $formData['judgment'] ?? 'to, co opisałaś/eś';
+            case 'OK10':
+                $who = $formData['who'] ?? '';
+                $what = $formData['what'] ?? '';
+                return ($who ? "sytuację z: $who" : '') . ($what ? " - $what" : 'tę sytuację');
             default:
                 return 'tę sytuację';
         }

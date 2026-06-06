@@ -84,6 +84,9 @@ class ClaudeService
             case 'DOS':
                 $message .= $this->formatDOSData($formData);
                 break;
+            case 'OK10':
+                $message .= $this->formatOK10Data($formData);
+                break;
         }
 
         return $message;
@@ -212,6 +215,52 @@ class ClaudeService
         }
         if (!empty($data['needs_selected']) && is_array($data['needs_selected'])) {
             $parts[] = "Wybrane potrzeby: " . implode(', ', $data['needs_selected']);
+        }
+
+        return implode("\n\n", $parts);
+    }
+
+    private function formatOK10Data(array $data): string
+    {
+        $parts = [];
+
+        // First 5 fields (sent to AI as per spec)
+        if (!empty($data['who'])) {
+            $parts[] = "Kto: {$data['who']}";
+        }
+        if (!empty($data['what'])) {
+            $parts[] = "Co: {$data['what']}";
+        }
+        if (!empty($data['thoughts_feelings'])) {
+            $parts[] = "Myśli i uczucia: {$data['thoughts_feelings']}";
+        }
+
+        // NVC feelings selected
+        if (!empty($data['feelings_nvc_selected']) && is_array($data['feelings_nvc_selected'])) {
+            $parts[] = "Wybrane uczucia NVC: " . implode(', ', $data['feelings_nvc_selected']);
+        }
+
+        // Violated needs
+        if (!empty($data['violated_needs']) && is_array($data['violated_needs'])) {
+            $needLabels = [
+                'security' => 'Poczucie bezpieczeństwa',
+                'sexual' => 'Potrzeby seksualne',
+                'social' => 'Osobiste relacje / potrzeby społeczne',
+                'ambition' => 'Ambicja / duma / prestiż'
+            ];
+            $violated = array_map(function($id) use ($needLabels) {
+                return $needLabels[$id] ?? $id;
+            }, $data['violated_needs']);
+            $parts[] = "Naruszone potrzeby: " . implode(', ', $violated);
+        }
+
+        if (!empty($data['other_needs'])) {
+            $parts[] = "Inne potrzeby: {$data['other_needs']}";
+        }
+
+        // NVC needs selected
+        if (!empty($data['needs_nvc_selected']) && is_array($data['needs_nvc_selected'])) {
+            $parts[] = "Wybrane potrzeby NVC: " . implode(', ', $data['needs_nvc_selected']);
         }
 
         return implode("\n\n", $parts);

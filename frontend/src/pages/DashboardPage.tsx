@@ -4,6 +4,13 @@ import { useAuth } from '../hooks/useAuth';
 import { listForms, deleteForm, generateAIFeedback, updateForm } from '../services/forms';
 import apiClient from '../services/api';
 
+const dashboardStyles = `
+  @media (max-width: 768px) {
+    .quick-actions-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+`;
 
 export default function DashboardPage() {
   const { user, logout } = useAuth();
@@ -70,7 +77,7 @@ export default function DashboardPage() {
         setAiLoading(false);
 
         const shouldOverwrite = window.confirm(
-          'Ten formularz ma już feedback empAItyczny.\n\nCzy chcesz wygenerować nowy feedback?\n\n✓ TAK - wygeneruj nowy (bez uwzględnienia poprzedniego)\n✗ NIE - pozostaw obecny'
+          'Ten formularz ma już feedback empAI.\n\nCzy chcesz wygenerować nowy feedback?\n\n✓ TAK - wygeneruj nowy (bez uwzględnienia poprzedniego)\n✗ NIE - pozostaw obecny'
         );
 
         if (shouldOverwrite) {
@@ -142,6 +149,7 @@ export default function DashboardPage() {
 
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
+      <style>{dashboardStyles}</style>
       {/* Header */}
       <div style={{
         display: 'flex',
@@ -186,9 +194,9 @@ export default function DashboardPage() {
       {/* Quick actions */}
       <div style={{ marginBottom: '30px' }}>
         <h2>Szybkie akcje</h2>
-        <div style={{
+        <div className="quick-actions-grid" style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+          gridTemplateColumns: 'repeat(4, 1fr)',
           gap: '20px',
           marginTop: '15px'
         }}>
@@ -244,6 +252,24 @@ export default function DashboardPage() {
           >
             <h3 style={{ color: 'white', margin: '0 0 10px 0' }}>DOS</h3>
             <p style={{ margin: 0, color: 'white' }}>Dziennik Osądów</p>
+          </button>
+
+          <button
+            onClick={() => navigate('/form/OK10')}
+            style={{
+              padding: '30px',
+              minWidth: '200px',
+              background: '#ab47bc',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}
+            onMouseOver={(e) => e.currentTarget.style.background = '#9c27b0'}
+            onMouseOut={(e) => e.currentTarget.style.background = '#ab47bc'}
+          >
+            <h3 style={{ color: 'white', margin: '0 0 10px 0' }}>OK10</h3>
+            <p style={{ margin: 0, color: 'white' }}>Obrachunek wg kroku 10 AA</p>
           </button>
         </div>
       </div>
@@ -399,15 +425,15 @@ export default function DashboardPage() {
                         opacity: aiLoading ? 0.6 : 1,
                       }}
                     >
-                      {aiLoading ? 'Ładowanie...' : 'empAItycznie'}
+                      {aiLoading ? 'Ładowanie...' : 'empAI'}
                     </button>
                     <button
                       onClick={(e) => handleDeleteForm(e, form.id)}
                       style={{
                         padding: '8px 16px',
-                        background: 'transparent',
-                        color: '#d32f2f',
-                        border: '1px solid #d32f2f',
+                        background: '#d32f2f',
+                        color: 'white',
+                        border: 'none',
                         borderRadius: '4px',
                         cursor: 'pointer',
                         fontSize: '14px',
@@ -452,7 +478,7 @@ export default function DashboardPage() {
               overflow: 'auto',
             }}
           >
-            <h2 style={{ marginTop: 0, color: '#9c27b0' }}>empAItycznie</h2>
+            <h2 style={{ marginTop: 0, color: '#9c27b0' }}>empAI</h2>
             {aiError ? (
               <div style={{ color: '#d32f2f', padding: '15px', background: '#ffebee', borderRadius: '4px' }}>
                 {aiError}

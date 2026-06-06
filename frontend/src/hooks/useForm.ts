@@ -2,17 +2,18 @@
  * useForm hook with auto-save functionality.
  */
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { createForm, updateForm, getForm, FormData } from '../services/forms';
+import { createForm, updateForm, getForm, FormData, generateAIFeedback } from '../services/forms';
 
-export function useForm(initialFormId: string | null = null, formType: 'TUP' | 'DUP' | 'DOS' = 'DUP') {
+export function useForm(initialFormId: string | null = null, formType: 'TUP' | 'DUP' | 'DOS' | 'OK10' = 'DUP') {
   const [formId, setFormId] = useState<string | null>(initialFormId);
   const [formData, setFormData] = useState<FormData>({});
   const [aiFeedback, setAiFeedback] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [isLoadingAI, setIsLoadingAI] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const AUTO_SAVE_DELAY = 30000; // 30 seconds
 
   // Load form data on mount
@@ -77,6 +78,41 @@ export function useForm(initialFormId: string | null = null, formType: 'TUP' | '
     await saveForm('completed');
   }, [saveForm]);
 
+  const requestAIFeedback = useCallback(async () => {
+    if (!formId) {
+      // Save first if not yet saved
+      await saveForm('draft');
+      // Wait a bit for formId to be set
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
+
+    setIsLoadingAI(true);
+    setError(null);
+
+    try {
+      const currentFormId = formId || (await createForm(formType, formData, 'draft')).id;
+      const response = await generateAIFeedback(currentFormId, false);
+
+      if (response.status === 'success') {
+        setAiFeedback(response.feedback);
+      } else if (response.status === 'feedback_exists') {
+        // User already has feedback, could prompt to overwrite
+        const overwrite = window.confirm('Feedback już istnieje. Czy chcesz go nadpisać?');
+        if (overwrite) {
+          const newResponse = await generateAIFeedback(currentFormId, true);
+          setAiFeedback(newResponse.feedback);
+        } else {
+          setAiFeedback(response.existing_feedback);
+        }
+      }
+    } catch (err) {
+      setError('Nie udało się wygenerować feedbacku AI');
+      console.error('AI feedback error:', err);
+    } finally {
+      setIsLoadingAI(false);
+    }
+  }, [formId, formType, formData, saveForm]);
+
   // Cleanup on unmount
   useEffect(() => {
     return () => {
@@ -93,7 +129,9 @@ export function useForm(initialFormId: string | null = null, formType: 'TUP' | '
     updateField,
     saveForm,
     submitForm,
+    requestAIFeedback,
     isSaving,
+    isLoadingAI,
     lastSaved,
     error,
   };

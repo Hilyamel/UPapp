@@ -1,4 +1,4 @@
-name: Deploy to Production
+name: Deploy to Production (FTP)
 
 on:
   workflow_dispatch:
@@ -7,101 +7,276 @@ on:
         description: 'Type "DEPLOY" to confirm deployment'
         required: true
         default: ''
+      environment:
+        description: 'Target environment'
+        required: true
+        type: choice
+        options:
+          - production
+          - staging
+        default: 'production'
+
   push:
     branches:
       - main
-    paths:
-      - '.github/workflows/deploy-production.yml'
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.gitignore'
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: github.event.inputs.confirm == 'DEPLOY'
+    # Only run if manually confirmed with "DEPLOY" or auto-deploy from main branch push
+    if: github.event_name == 'push' || github.event.inputs.confirm == 'DEPLOY'
+
+    environment:
+      name: ${{ github.event.inputs.environment || 'production' }}
+      url: https://przetargr-domow.pl
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: 🔍 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.2'
+      - name: 📋 Deployment Info
+        run: |
+          echo "🚀 Starting deployment to ${{ github.event.inputs.environment || 'production' }}"
+          echo "📦 Repository: ${{ github.repository }}"
+          echo "🔖 Commit: ${{ github.sha }}"
+          echo "👤 Triggered by: ${{ github.actor }}"
+          echo "📅 Time: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
 
-    - name: Install backend dependencies
-      working-directory: ./backend
-      run: composer install --no-dev --optimize-autoloader
+      - name: 🐘 Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, xml, curl, zip, json
+          coverage: none
+          tools: composer:v2
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
+      - name: 📦 Install backend dependencies
+        working-directory: ./UPapp/backend
+        run: |
+          echo "Installing production dependencies..."
+          composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
+          composer dump-autoload --optimize
 
-    - name: Install frontend dependencies
-      working-directory: ./frontend
-      run: npm ci
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: ./UPapp/frontend/package-lock.json
 
-    - name: Build frontend
-      working-directory: ./frontend
-      env:
-        VITE_API_URL: https://upapp.mindincoach.com/api
-      run: npm run build
+      - name: 📦 Install frontend dependencies
+        working-directory: ./UPapp/frontend
+        run: |
+          echo "Installing frontend dependencies..."
+          npm ci --prefer-offline --no-audit
 
-    - name: Create production .env
-      working-directory: ./backend
-      run: |
-        cat > .env << 'EOF'
-        APP_ENV=prod
-        APP_URL=https://upapp.mindincoach.com
+      - name: 🏗️ Build frontend
+        working-directory: ./UPapp/frontend
+        env:
+          VITE_API_URL: https://przetargr-domow.pl/api
+          NODE_ENV: production
+        run: |
+          echo "Building frontend for production..."
+          npm run build
+          echo "✅ Frontend build completed"
+          ls -lah dist/
 
-        # AWS Configuration
-        AWS_REGION=${{ secrets.AWS_REGION }}
-        AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: 🔐 Create production .env
+        working-directory: ./UPapp/backend
+        run: |
+          echo "Creating production environment configuration..."
+          cat > .env << 'EOF'
+          APP_ENV=production
+          APP_DEBUG=false
+          APP_URL=https://przetargr-domow.pl
 
-        # DynamoDB
-        DYNAMODB_TABLE_PREFIX=UpApp
+          # Database Configuration
+          DB_CONNECTION=mysql
+          DB_HOST=${{ secrets.DB_HOST }}
+          DB_PORT=${{ secrets.DB_PORT || 3306 }}
+          DB_DATABASE=${{ secrets.DB_DATABASE }}
+          DB_USERNAME=${{ secrets.DB_USERNAME }}
+          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
 
-        # Backend API
-        BACKEND_URL=https://upapp.mindincoach.com
+          # AWS Configuration (if used)
+          AWS_REGION=${{ secrets.AWS_REGION }}
+          AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-        # Email Configuration
-        SMTP_HOST=${{ secrets.SMTP_HOST }}
-        SMTP_PORT=${{ secrets.SMTP_PORT }}
-        SMTP_USERNAME=${{ secrets.SMTP_USERNAME }}
-        SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}
-        SMTP_FROM_EMAIL=${{ secrets.SMTP_FROM_EMAIL }}
-        SMTP_FROM_NAME=UPapp
+          # DynamoDB (if used)
+          DYNAMODB_TABLE_PREFIX=UpApp
 
-        # Claude API
-        ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}
-        EMPATHY_PROMPT_PATH=empathy-prompt.txt
-        EOF
+          # Email Configuration
+          SMTP_HOST=${{ secrets.SMTP_HOST }}
+          SMTP_PORT=${{ secrets.SMTP_PORT || 587 }}
+          SMTP_ENCRYPTION=${{ secrets.SMTP_ENCRYPTION || 'tls' }}
+          SMTP_USERNAME=${{ secrets.SMTP_USERNAME }}
+          SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}
+          SMTP_FROM_EMAIL=${{ secrets.SMTP_FROM_EMAIL }}
+          SMTP_FROM_NAME="UPapp"
 
-    - name: Deploy via FTP
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-      with:
-        server: ${{ secrets.FTP_HOST }}
-        username: ${{ secrets.FTP_USERNAME }}
-        password: ${{ secrets.FTP_PASSWORD }}
-        local-dir: ./
-        server-dir: /
-        exclude: |
-          **/.git*
-          **/.git*/**
-          **/node_modules/**
-          **/tests/**
-          **/frontend/src/**
-          **/frontend/node_modules/**
-          **/.env.example
-          **/README.md
-          **/backend/test-*.php
-          **/backend/get-*.php
-          **/backend/admin-*.php
-          **/*.log
+          # Claude API
+          ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}
+          EMPATHY_PROMPT_PATH=/home/debian/public_html/empathy-prompt.txt
 
-    - name: Deploy summary
-      run: |
-        echo "✅ Deployment completed successfully!"
-        echo "🌐 Site: https://upapp.mindincoach.com"
-        echo "📅 Time: $(date)"
-        echo "🔖 Commit: ${{ github.sha }}"
+          # Security
+          SESSION_LIFETIME=120
+          CORS_ALLOWED_ORIGINS=https://przetargr-domow.pl
+
+          # Deployment Info
+          DEPLOY_TIME=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          DEPLOY_COMMIT=${{ github.sha }}
+          DEPLOY_BRANCH=${{ github.ref_name }}
+          EOF
+          echo "✅ Environment configuration created"
+
+      - name: 📝 Create deployment metadata
+        run: |
+          cat > ./UPapp/DEPLOYMENT_INFO.txt << EOF
+          ================================================
+          UPapp Production Deployment Information
+          ================================================
+
+          Deployment Date: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          Git Commit: ${{ github.sha }}
+          Git Branch: ${{ github.ref_name }}
+          Deployed By: ${{ github.actor }}
+          Workflow Run: ${{ github.run_number }}
+          Environment: ${{ github.event.inputs.environment || 'production' }}
+
+          Repository: ${{ github.repository }}
+          Commit Message: ${{ github.event.head_commit.message }}
+
+          ================================================
+          EOF
+
+          echo "Deployment metadata created"
+          cat ./UPapp/DEPLOYMENT_INFO.txt
+
+      - name: 🚀 Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: 57.131.47.46
+          username: debian
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftp
+          port: 21
+          local-dir: ./UPapp/
+          server-dir: /home/debian/public_html/
+          state-name: .ftp-deploy-sync-state.json
+          dry-run: false
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/tests/**
+            **/test/**
+            **/__tests__/**
+            **/frontend/src/**
+            **/frontend/public/**
+            **/frontend/node_modules/**
+            **/frontend/package*.json
+            **/frontend/vite.config.js
+            **/frontend/tsconfig*.json
+            **/frontend/.vite/**
+            **/.env.example
+            **/.env.local
+            **/.env.development
+            **/README.md
+            **/CONTRIBUTING.md
+            **/LICENSE
+            **/backend/tests/**
+            **/backend/phpunit.xml
+            **/backend/test-*.php
+            **/backend/get-*.php
+            **/backend/admin-*.php
+            **/*.log
+            **/*.test.js
+            **/*.spec.js
+            **/.DS_Store
+            **/Thumbs.db
+            **/.vscode/**
+            **/.idea/**
+            **/coverage/**
+            **/.nyc_output/**
+            **/specs/**
+            **/docs/**
+
+      - name: 🧹 Verify deployment structure
+        run: |
+          echo "Expected server structure:"
+          echo "/home/debian/public_html/"
+          echo "├── backend/"
+          echo "│   ├── src/"
+          echo "│   ├── public/index.php"
+          echo "│   ├── vendor/"
+          echo "│   ├── .env"
+          echo "│   └── composer.json"
+          echo "├── frontend/"
+          echo "│   └── dist/"
+          echo "│       ├── index.html"
+          echo "│       ├── assets/"
+          echo "│       └── ..."
+          echo "├── empathy-prompt.txt"
+          echo "└── DEPLOYMENT_INFO.txt"
+
+      - name: 🧪 Post-deployment health check
+        continue-on-error: true
+        run: |
+          echo "Waiting 10 seconds for server to settle..."
+          sleep 10
+
+          echo "Checking site availability..."
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" https://przetargr-domow.pl || echo "000")
+
+          if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "301" ] || [ "$HTTP_CODE" = "302" ]; then
+            echo "✅ Site is responding (HTTP $HTTP_CODE)"
+          else
+            echo "⚠️ Site returned HTTP $HTTP_CODE - please verify manually"
+          fi
+
+      - name: 📊 Deployment Summary
+        if: always()
+        run: |
+          echo ""
+          echo "╔════════════════════════════════════════════════╗"
+          echo "║       Deployment Summary                       ║"
+          echo "╚════════════════════════════════════════════════╝"
+          echo ""
+          echo "✅ Deployment process completed!"
+          echo ""
+          echo "🌐 Production URL: https://przetargr-domow.pl"
+          echo "🖥️  Server: 57.131.47.46"
+          echo "👤 User: debian"
+          echo "📁 Path: /home/debian/public_html/"
+          echo ""
+          echo "📅 Time: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+          echo "🔖 Commit: ${{ github.sha }}"
+          echo "🌿 Branch: ${{ github.ref_name }}"
+          echo "👤 By: ${{ github.actor }}"
+          echo ""
+          echo "Next steps:"
+          echo "1. Verify the site is working: https://przetargr-domow.pl"
+          echo "2. Check backend API: https://przetargr-domow.pl/api/health"
+          echo "3. Monitor server logs for any issues"
+          echo "4. Test critical user flows"
+          echo ""
+
+      - name: 💬 Notify on failure
+        if: failure()
+        run: |
+          echo "❌ Deployment FAILED!"
+          echo "Please check the logs above for details."
+          echo "Common issues:"
+          echo "  - FTP credentials incorrect"
+          echo "  - Server disk space full"
+          echo "  - Build errors in frontend/backend"
+          echo "  - Network connectivity issues"
+          exit 1

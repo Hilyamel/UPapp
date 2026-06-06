@@ -2,15 +2,18 @@
  * Form summary component - displays all fields with section headers.
  */
 import React, { useEffect, useState } from 'react';
-import { getFormSummary, FormSummary as FormSummaryType } from '../../services/forms';
+import { useNavigate } from 'react-router-dom';
+import { getFormSummary, FormSummary as FormSummaryType, generateAIFeedback, deleteForm } from '../../services/forms';
 
 interface FormSummaryProps {
   formId: string;
 }
 
 export default function FormSummary({ formId }: FormSummaryProps) {
+  const navigate = useNavigate();
   const [summary, setSummary] = useState<FormSummaryType | null>(null);
   const [loading, setLoading] = useState(true);
+  const [aiLoading, setAiLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -180,13 +183,119 @@ export default function FormSummary({ formId }: FormSummaryProps) {
           borderLeft: '4px solid #66bb6a'
         }}>
           <h3 style={{ marginTop: 0, marginBottom: '10px', color: '#2e7d32', fontSize: '18px' }}>
-            💭 Feedback empAItyczny
+            💭 Feedback empAI
           </h3>
           <p style={{ lineHeight: '1.6', color: '#1b5e20', margin: 0, fontSize: '14px' }}>
             {summary.ai_feedback}
           </p>
         </div>
       )}
+
+      {/* Action Buttons */}
+      <div style={{
+        marginTop: '30px',
+        display: 'flex',
+        gap: '15px',
+        justifyContent: 'center',
+        flexWrap: 'wrap'
+      }}>
+        <button
+          onClick={() => navigate(`/form/${summary.form_type}?id=${formId}`)}
+          style={{
+            padding: '12px 24px',
+            background: '#2196f3',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontSize: '14px',
+            fontWeight: '500'
+          }}
+        >
+          Edytuj
+        </button>
+
+        <button
+          onClick={handleGenerateAI}
+          disabled={aiLoading}
+          style={{
+            padding: '12px 24px',
+            background: '#66bb6a',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: aiLoading ? 'not-allowed' : 'pointer',
+            opacity: aiLoading ? 0.6 : 1,
+            fontSize: '14px',
+            fontWeight: '500'
+          }}
+        >
+          {aiLoading ? 'Ładowanie...' : 'empAI'}
+        </button>
+
+        <button
+          onClick={handleDelete}
+          style={{
+            padding: '12px 24px',
+            background: '#d32f2f',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontSize: '14px',
+            fontWeight: '500'
+          }}
+        >
+          Usuń
+        </button>
+      </div>
     </div>
   );
+
+  async function handleGenerateAI() {
+    setAiLoading(true);
+    setError(null);
+
+    try {
+      const response = await generateAIFeedback(formId, false);
+
+      if (response.status === 'feedback_exists') {
+        const shouldOverwrite = window.confirm(
+          'Ten formularz ma już feedback empAI.\n\nCzy chcesz wygenerować nowy feedback?\n\n✓ TAK - wygeneruj nowy (bez uwzględnienia poprzedniego)\n✗ NIE - pozostaw obecny'
+        );
+
+        if (shouldOverwrite) {
+          const newResponse = await generateAIFeedback(formId, true);
+          if (summary) {
+            setSummary({ ...summary, ai_feedback: newResponse.feedback });
+          }
+        }
+      } else if (response.status === 'success') {
+        if (summary) {
+          setSummary({ ...summary, ai_feedback: response.feedback });
+        }
+      }
+    } catch (err) {
+      setError('Nie udało się wygenerować feedbacku AI');
+      console.error('AI feedback error:', err);
+    } finally {
+      setAiLoading(false);
+    }
+  }
+
+  async function handleDelete() {
+    const confirmed = window.confirm(
+      'Czy na pewno chcesz usunąć ten formularz?\n\nTej operacji nie można cofnąć.'
+    );
+
+    if (confirmed) {
+      try {
+        await deleteForm(formId);
+        navigate('/dashboard');
+      } catch (err) {
+        setError('Nie udało się usunąć formularza');
+        console.error('Delete error:', err);
+      }
+    }
+  }
 }

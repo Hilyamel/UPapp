@@ -1,0 +1,674 @@
+[
+  {
+    "name_pl": "współczucie",
+    "category": "fulfilled",
+    "subcategory": "Czułość",
+    "sort_order": 1
+  },
+  {
+    "name_pl": "serdeczność",
+    "category": "fulfilled",
+    "subcategory": "Czułość",
+    "sort_order": 2
+  },
+  {
+    "name_pl": "otwartość",
+    "category": "fulfilled",
+    "subcategory": "Czułość",
+    "sort_order": 3
+  },
+  {
+    "name_pl": "delikatność",
+    "category": "fulfilled",
+    "subcategory": "Czułość",
+    "sort_order": 4
+  },
+  {
+    "name_pl": "tkliwość",
+    "category": "fulfilled",
+    "subcategory": "Czułość",
+    "sort_order": 5
+  },
+  {
+    "name_pl": "łagodność",
+    "category": "fulfilled",
+    "subcategory": "Czułość",
+    "sort_order": 6
+  },
+  {
+    "name_pl": "pochłonięcie",
+    "category": "fulfilled",
+    "subcategory": "Zaangażowanie",
+    "sort_order": 7
+  },
+  {
+    "name_pl": "ciekawość",
+    "category": "fulfilled",
+    "subcategory": "Zaangażowanie",
+    "sort_order": 8
+  },
+  {
+    "name_pl": "oczarowanie",
+    "category": "fulfilled",
+    "subcategory": "Zaangażowanie",
+    "sort_order": 9
+  },
+  {
+    "name_pl": "zafascynowanie",
+    "category": "fulfilled",
+    "subcategory": "Zaangażowanie",
+    "sort_order": 10
+  },
+  {
+    "name_pl": "zainteresowanie",
+    "category": "fulfilled",
+    "subcategory": "Zaangażowanie",
+    "sort_order": 11
+  },
+  {
+    "name_pl": "zaintrygowanie",
+    "category": "fulfilled",
+    "subcategory": "Zaangażowanie",
+    "sort_order": 12
+  },
+  {
+    "name_pl": "zdumienie",
+    "category": "fulfilled",
+    "subcategory": "Ekscytacja",
+    "sort_order": 13
+  },
+  {
+    "name_pl": "pobudzenie",
+    "category": "fulfilled",
+    "subcategory": "Ekscytacja",
+    "sort_order": 14
+  },
+  {
+    "name_pl": "oszołomienie",
+    "category": "fulfilled",
+    "subcategory": "Ekscytacja",
+    "sort_order": 15
+  },
+  {
+    "name_pl": "energiczność",
+    "category": "fulfilled",
+    "subcategory": "Ekscytacja",
+    "sort_order": 16
+  },
+  {
+    "name_pl": "ożywienie",
+    "category": "fulfilled",
+    "subcategory": "Ekscytacja",
+    "sort_order": 17
+  },
+  {
+    "name_pl": "entuzjazm",
+    "category": "fulfilled",
+    "subcategory": "Inspiracja",
+    "sort_order": 18
+  },
+  {
+    "name_pl": "zadziwienie",
+    "category": "fulfilled",
+    "subcategory": "Inspiracja",
+    "sort_order": 19
+  },
+  {
+    "name_pl": "zmotywowanie",
+    "category": "fulfilled",
+    "subcategory": "Inspiracja",
+    "sort_order": 20
+  },
+  {
+    "name_pl": "rozbawienie",
+    "category": "fulfilled",
+    "subcategory": "Radość",
+    "sort_order": 21
+  },
+  {
+    "name_pl": "wesołość",
+    "category": "fulfilled",
+    "subcategory": "Radość",
+    "sort_order": 22
+  },
+  {
+    "name_pl": "zachwyt",
+    "category": "fulfilled",
+    "subcategory": "Radość",
+    "sort_order": 23
+  },
+  {
+    "name_pl": "podekscytowanie",
+    "category": "fulfilled",
+    "subcategory": "Radość",
+    "sort_order": 24
+  },
+  {
+    "name_pl": "uradowanie",
+    "category": "fulfilled",
+    "subcategory": "Radość",
+    "sort_order": 25
+  },
+  {
+    "name_pl": "rozochocenie",
+    "category": "fulfilled",
+    "subcategory": "Radość",
+    "sort_order": 26
+  },
+  {
+    "name_pl": "rozanielenie",
+    "category": "fulfilled",
+    "subcategory": "Radość",
+    "sort_order": 27
+  },
+  {
+    "name_pl": "euforia",
+    "category": "fulfilled",
+    "subcategory": "Radość",
+    "sort_order": 28
+  },
+  {
+    "name_pl": "satysfakcja",
+    "category": "fulfilled",
+    "subcategory": "Radość",
+    "sort_order": 29
+  },
+  {
+    "name_pl": "poruszenie",
+    "category": "fulfilled",
+    "subcategory": "Wdzięczność",
+    "sort_order": 30
+  },
+  {
+    "name_pl": "wzruszenie",
+    "category": "fulfilled",
+    "subcategory": "Wdzięczność",
+    "sort_order": 31
+  },
+  {
+    "name_pl": "spełnienie",
+    "category": "fulfilled",
+    "subcategory": "Spokój",
+    "sort_order": 32
+  },
+  {
+    "name_pl": "skupienie",
+    "category": "fulfilled",
+    "subcategory": "Spokój",
+    "sort_order": 33
+  },
+  {
+    "name_pl": "zrelaksowanie",
+    "category": "fulfilled",
+    "subcategory": "Spokój",
+    "sort_order": 34
+  },
+  {
+    "name_pl": "zadowolenie",
+    "category": "fulfilled",
+    "subcategory": "Spokój",
+    "sort_order": 35
+  },
+  {
+    "name_pl": "beztroska",
+    "category": "fulfilled",
+    "subcategory": "Spokój",
+    "sort_order": 36
+  },
+  {
+    "name_pl": "odprężenie",
+    "category": "fulfilled",
+    "subcategory": "Spokój",
+    "sort_order": 37
+  },
+  {
+    "name_pl": "rozluźnienie",
+    "category": "fulfilled",
+    "subcategory": "Spokój",
+    "sort_order": 38
+  },
+  {
+    "name_pl": "ulga",
+    "category": "fulfilled",
+    "subcategory": "Spokój",
+    "sort_order": 39
+  },
+  {
+    "name_pl": "ufność",
+    "category": "fulfilled",
+    "subcategory": "Nadzieja",
+    "sort_order": 40
+  },
+  {
+    "name_pl": "lekkość",
+    "category": "fulfilled",
+    "subcategory": "Nadzieja",
+    "sort_order": 41
+  },
+  {
+    "name_pl": "uniesienie",
+    "category": "fulfilled",
+    "subcategory": "Nadzieja",
+    "sort_order": 42
+  },
+  {
+    "name_pl": "niezadowolenie",
+    "category": "unfulfilled",
+    "subcategory": "Złość",
+    "sort_order": 43
+  },
+  {
+    "name_pl": "zdenerwowanie",
+    "category": "unfulfilled",
+    "subcategory": "Złość",
+    "sort_order": 44
+  },
+  {
+    "name_pl": "frustracja",
+    "category": "unfulfilled",
+    "subcategory": "Złość",
+    "sort_order": 45
+  },
+  {
+    "name_pl": "irytacja",
+    "category": "unfulfilled",
+    "subcategory": "Złość",
+    "sort_order": 46
+  },
+  {
+    "name_pl": "zbulwersowanie",
+    "category": "unfulfilled",
+    "subcategory": "Złość",
+    "sort_order": 47
+  },
+  {
+    "name_pl": "rozdrażnienie",
+    "category": "unfulfilled",
+    "subcategory": "Złość",
+    "sort_order": 48
+  },
+  {
+    "name_pl": "oburzenie",
+    "category": "unfulfilled",
+    "subcategory": "Złość",
+    "sort_order": 49
+  },
+  {
+    "name_pl": "wzburzenie",
+    "category": "unfulfilled",
+    "subcategory": "Złość",
+    "sort_order": 50
+  },
+  {
+    "name_pl": "gniew",
+    "category": "unfulfilled",
+    "subcategory": "Złość",
+    "sort_order": 51
+  },
+  {
+    "name_pl": "wściekłość",
+    "category": "unfulfilled",
+    "subcategory": "Złość",
+    "sort_order": 52
+  },
+  {
+    "name_pl": "wrogość",
+    "category": "unfulfilled",
+    "subcategory": "Złość",
+    "sort_order": 53
+  },
+  {
+    "name_pl": "nienawiść",
+    "category": "unfulfilled",
+    "subcategory": "Złość",
+    "sort_order": 54
+  },
+  {
+    "name_pl": "niesmak",
+    "category": "unfulfilled",
+    "subcategory": "Odraza",
+    "sort_order": 55
+  },
+  {
+    "name_pl": "obrzydzenie",
+    "category": "unfulfilled",
+    "subcategory": "Odraza",
+    "sort_order": 56
+  },
+  {
+    "name_pl": "zdegustowanie",
+    "category": "unfulfilled",
+    "subcategory": "Odraza",
+    "sort_order": 57
+  },
+  {
+    "name_pl": "wstręt",
+    "category": "unfulfilled",
+    "subcategory": "Odraza",
+    "sort_order": 58
+  },
+  {
+    "name_pl": "niechęć",
+    "category": "unfulfilled",
+    "subcategory": "Odraza",
+    "sort_order": 59
+  },
+  {
+    "name_pl": "pogarda",
+    "category": "unfulfilled",
+    "subcategory": "Odraza",
+    "sort_order": 60
+  },
+  {
+    "name_pl": "zaskoczenie",
+    "category": "unfulfilled",
+    "subcategory": "Zmieszanie",
+    "sort_order": 61
+  },
+  {
+    "name_pl": "zdezorientowanie",
+    "category": "unfulfilled",
+    "subcategory": "Zmieszanie",
+    "sort_order": 62
+  },
+  {
+    "name_pl": "zdziwienie",
+    "category": "unfulfilled",
+    "subcategory": "Zmieszanie",
+    "sort_order": 63
+  },
+  {
+    "name_pl": "osłupienie",
+    "category": "unfulfilled",
+    "subcategory": "Zmieszanie",
+    "sort_order": 64
+  },
+  {
+    "name_pl": "rozdarcie",
+    "category": "unfulfilled",
+    "subcategory": "Zmieszanie",
+    "sort_order": 65
+  },
+  {
+    "name_pl": "zszokowanie",
+    "category": "unfulfilled",
+    "subcategory": "Zmieszanie",
+    "sort_order": 66
+  },
+  {
+    "name_pl": "rozczarowanie",
+    "category": "unfulfilled",
+    "subcategory": "Smutek",
+    "sort_order": 67
+  },
+  {
+    "name_pl": "przygnębienie",
+    "category": "unfulfilled",
+    "subcategory": "Smutek",
+    "sort_order": 68
+  },
+  {
+    "name_pl": "bezsilność",
+    "category": "unfulfilled",
+    "subcategory": "Smutek",
+    "sort_order": 69
+  },
+  {
+    "name_pl": "zawód",
+    "category": "unfulfilled",
+    "subcategory": "Smutek",
+    "sort_order": 70
+  },
+  {
+    "name_pl": "zniechęcenie",
+    "category": "unfulfilled",
+    "subcategory": "Smutek",
+    "sort_order": 71
+  },
+  {
+    "name_pl": "tęsknota",
+    "category": "unfulfilled",
+    "subcategory": "Smutek",
+    "sort_order": 72
+  },
+  {
+    "name_pl": "rozgoryczenie",
+    "category": "unfulfilled",
+    "subcategory": "Smutek",
+    "sort_order": 73
+  },
+  {
+    "name_pl": "rozpacz",
+    "category": "unfulfilled",
+    "subcategory": "Smutek",
+    "sort_order": 74
+  },
+  {
+    "name_pl": "rezygnacja",
+    "category": "unfulfilled",
+    "subcategory": "Smutek",
+    "sort_order": 75
+  },
+  {
+    "name_pl": "skrucha",
+    "category": "unfulfilled",
+    "subcategory": "Smutek",
+    "sort_order": 76
+  },
+  {
+    "name_pl": "nostalgia",
+    "category": "unfulfilled",
+    "subcategory": "Smutek",
+    "sort_order": 77
+  },
+  {
+    "name_pl": "zaniepokojenie",
+    "category": "unfulfilled",
+    "subcategory": "Niepokój",
+    "sort_order": 78
+  },
+  {
+    "name_pl": "napięcie",
+    "category": "unfulfilled",
+    "subcategory": "Niepokój",
+    "sort_order": 79
+  },
+  {
+    "name_pl": "niepewność",
+    "category": "unfulfilled",
+    "subcategory": "Niepokój",
+    "sort_order": 80
+  },
+  {
+    "name_pl": "obawa",
+    "category": "unfulfilled",
+    "subcategory": "Niepokój",
+    "sort_order": 81
+  },
+  {
+    "name_pl": "nieufność",
+    "category": "unfulfilled",
+    "subcategory": "Niepokój",
+    "sort_order": 82
+  },
+  {
+    "name_pl": "strach",
+    "category": "unfulfilled",
+    "subcategory": "Niepokój",
+    "sort_order": 83
+  },
+  {
+    "name_pl": "lęk",
+    "category": "unfulfilled",
+    "subcategory": "Niepokój",
+    "sort_order": 84
+  },
+  {
+    "name_pl": "przestrach",
+    "category": "unfulfilled",
+    "subcategory": "Niepokój",
+    "sort_order": 85
+  },
+  {
+    "name_pl": "roztrzęsienie",
+    "category": "unfulfilled",
+    "subcategory": "Niepokój",
+    "sort_order": 86
+  },
+  {
+    "name_pl": "przerażenie",
+    "category": "unfulfilled",
+    "subcategory": "Niepokój",
+    "sort_order": 87
+  },
+  {
+    "name_pl": "trwoga",
+    "category": "unfulfilled",
+    "subcategory": "Niepokój",
+    "sort_order": 88
+  },
+  {
+    "name_pl": "paraliż",
+    "category": "unfulfilled",
+    "subcategory": "Niepokój",
+    "sort_order": 89
+  },
+  {
+    "name_pl": "panika",
+    "category": "unfulfilled",
+    "subcategory": "Niepokój",
+    "sort_order": 90
+  },
+  {
+    "name_pl": "speszenie",
+    "category": "unfulfilled",
+    "subcategory": "Zakłopotanie",
+    "sort_order": 91
+  },
+  {
+    "name_pl": "konsternacja",
+    "category": "unfulfilled",
+    "subcategory": "Zakłopotanie",
+    "sort_order": 92
+  },
+  {
+    "name_pl": "onieśmielenie",
+    "category": "unfulfilled",
+    "subcategory": "Zakłopotanie",
+    "sort_order": 93
+  },
+  {
+    "name_pl": "skrępowanie",
+    "category": "unfulfilled",
+    "subcategory": "Zakłopotanie",
+    "sort_order": 94
+  },
+  {
+    "name_pl": "zażenowanie",
+    "category": "unfulfilled",
+    "subcategory": "Zakłopotanie",
+    "sort_order": 95
+  },
+  {
+    "name_pl": "zawstydzenie",
+    "category": "unfulfilled",
+    "subcategory": "Zakłopotanie",
+    "sort_order": 96
+  },
+  {
+    "name_pl": "znudzenie",
+    "category": "unfulfilled",
+    "subcategory": "Zmęczenie",
+    "sort_order": 97
+  },
+  {
+    "name_pl": "wyczerpanie",
+    "category": "unfulfilled",
+    "subcategory": "Zmęczenie",
+    "sort_order": 98
+  },
+  {
+    "name_pl": "senność",
+    "category": "unfulfilled",
+    "subcategory": "Zmęczenie",
+    "sort_order": 99
+  },
+  {
+    "name_pl": "apatia",
+    "category": "unfulfilled",
+    "subcategory": "Zmęczenie",
+    "sort_order": 100
+  },
+  {
+    "name_pl": "osłabienie",
+    "category": "unfulfilled",
+    "subcategory": "Zmęczenie",
+    "sort_order": 101
+  },
+  {
+    "name_pl": "wycieńczenie",
+    "category": "unfulfilled",
+    "subcategory": "Zmęczenie",
+    "sort_order": 102
+  },
+  {
+    "name_pl": "znużenie",
+    "category": "unfulfilled",
+    "subcategory": "Zmęczenie",
+    "sort_order": 103
+  },
+  {
+    "name_pl": "pustka",
+    "category": "unfulfilled",
+    "subcategory": "Zmęczenie",
+    "sort_order": 104
+  },
+  {
+    "name_pl": "ospałość",
+    "category": "unfulfilled",
+    "subcategory": "Zmęczenie",
+    "sort_order": 105
+  },
+  {
+    "name_pl": "otępienie",
+    "category": "unfulfilled",
+    "subcategory": "Zmęczenie",
+    "sort_order": 106
+  },
+  {
+    "name_pl": "przeciążenie",
+    "category": "unfulfilled",
+    "subcategory": "Zmęczenie",
+    "sort_order": 107
+  },
+  {
+    "name_pl": "rozbicie",
+    "category": "unfulfilled",
+    "subcategory": "Zmęczenie",
+    "sort_order": 108
+  },
+  {
+    "name_pl": "odrętwienie",
+    "category": "unfulfilled",
+    "subcategory": "Zmęczenie",
+    "sort_order": 109
+  },
+  {
+    "name_pl": "przytłoczenie",
+    "category": "unfulfilled",
+    "subcategory": "Zmęczenie",
+    "sort_order": 110
+  },
+  {
+    "name_pl": "obojętność",
+    "category": "unfulfilled",
+    "subcategory": "Zmęczenie",
+    "sort_order": 111
+  },
+  {
+    "name_pl": "osowiałość",
+    "category": "unfulfilled",
+    "subcategory": "Zmęczenie",
+    "sort_order": 112
+  }
+]
