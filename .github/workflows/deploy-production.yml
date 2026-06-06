@@ -159,22 +159,54 @@ jobs:
           echo "Deployment metadata created"
           cat ./DEPLOYMENT_INFO.txt
 
-      - name: 🚀 Deploy via SFTP
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+      - name: 🚀 Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: 57.131.47.46
-          username: debian
+          server: hinol.ftp.dhosting.pl
+          username: ohj9oo_upappmin
           password: ${{ secrets.FTP_PASSWORD }}
-          port: 22
-          local_path: ./
-          remote_path: /home/debian/public_html/
-          sftp_only: true
-          args: '-o ConnectTimeout=5'
+          protocol: ftps
+          port: 21
+          local-dir: ./
+          server-dir: /domains/przetargr-domow.pl/public_html/
+          state-name: .ftp-deploy-sync-state.json
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/tests/**
+            **/test/**
+            **/__tests__/**
+            **/frontend/src/**
+            **/frontend/public/**
+            **/frontend/node_modules/**
+            **/frontend/package*.json
+            **/frontend/vite.config.ts
+            **/frontend/tsconfig*.json
+            **/frontend/.vite/**
+            **/.env.example
+            **/.env.local
+            **/.env.development
+            **/README.md
+            **/backend/tests/**
+            **/backend/phpunit.xml
+            **/backend/test-*.php
+            **/backend/get-*.php
+            **/backend/admin-*.php
+            **/*.log
+            **/*.test.js
+            **/*.spec.js
+            **/.DS_Store
+            **/.vscode/**
+            **/.idea/**
+            **/coverage/**
+            **/docs/**
 
       - name: 🧹 Verify deployment structure
         run: |
           echo "Expected server structure:"
-          echo "/home/debian/public_html/"
+          echo "/domains/przetargr-domow.pl/public_html/"
           echo "├── backend/"
           echo "│   ├── src/"
           echo "│   ├── public/index.php"
