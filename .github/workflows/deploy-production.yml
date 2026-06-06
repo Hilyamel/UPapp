@@ -165,7 +165,7 @@ jobs:
           server: 57.131.47.46
           username: debian
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftp
+          protocol: ftps
           port: 21
           local-dir: ./
           server-dir: /home/debian/public_html/
