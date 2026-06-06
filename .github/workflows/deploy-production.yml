@@ -159,55 +159,17 @@ jobs:
           echo "Deployment metadata created"
           cat ./DEPLOYMENT_INFO.txt
 
-      - name: 🚀 Deploy via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: 🚀 Deploy via SFTP
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
           server: 57.131.47.46
           username: debian
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftps
-          port: 21
-          local-dir: ./
-          server-dir: /home/debian/public_html/
-          state-name: .ftp-deploy-sync-state.json
-          dry-run: false
-          dangerous-clean-slate: false
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/tests/**
-            **/test/**
-            **/__tests__/**
-            **/frontend/src/**
-            **/frontend/public/**
-            **/frontend/node_modules/**
-            **/frontend/package*.json
-            **/frontend/vite.config.js
-            **/frontend/tsconfig*.json
-            **/frontend/.vite/**
-            **/.env.example
-            **/.env.local
-            **/.env.development
-            **/README.md
-            **/CONTRIBUTING.md
-            **/LICENSE
-            **/backend/tests/**
-            **/backend/phpunit.xml
-            **/backend/test-*.php
-            **/backend/get-*.php
-            **/backend/admin-*.php
-            **/*.log
-            **/*.test.js
-            **/*.spec.js
-            **/.DS_Store
-            **/Thumbs.db
-            **/.vscode/**
-            **/.idea/**
-            **/coverage/**
-            **/.nyc_output/**
-            **/specs/**
-            **/docs/**
+          port: 22
+          local_path: ./
+          remote_path: /home/debian/public_html/
+          sftp_only: true
+          args: '-o ConnectTimeout=5'
 
       - name: 🧹 Verify deployment structure
         run: |
