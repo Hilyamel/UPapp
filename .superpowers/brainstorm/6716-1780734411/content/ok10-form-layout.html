@@ -1,0 +1,166 @@
+<h2>Struktura formularza OK10</h2>
+<p class="subtitle">Wszystkie pola widoczne od razu - podobnie jak DUP</p>
+
+<div class="mockup">
+  <div class="mockup-header">Formularz OK10 - Obrachunek wg kroku 10 AA</div>
+  <div class="mockup-body" style="padding: 20px; max-height: 600px; overflow-y: auto;">
+
+    <!-- Connection scale (jak w TUP?) -->
+    <div style="margin-bottom: 25px; padding: 15px; background: #f5f5f5; border-radius: 4px;">
+      <label style="font-weight: bold; display: block; margin-bottom: 10px;">
+        Connection Scale (PRZED)
+      </label>
+      <div style="display: flex; gap: 10px;">
+        <span>0</span>
+        <input type="range" min="0" max="10" style="flex: 1;" />
+        <span>10</span>
+      </div>
+    </div>
+
+    <!-- Kto -->
+    <div style="margin-bottom: 20px;">
+      <label style="font-weight: bold; display: block; margin-bottom: 5px;">Kto</label>
+      <input type="text" placeholder="Osoba/osoby..." class="mock-input" style="width: 100%;" />
+    </div>
+
+    <!-- Co -->
+    <div style="margin-bottom: 20px;">
+      <label style="font-weight: bold; display: block; margin-bottom: 5px;">Co</label>
+      <textarea placeholder="Co się wydarzyło..." rows="3" class="mock-input" style="width: 100%;"></textarea>
+    </div>
+
+    <!-- Myśli i uczucia -->
+    <div style="margin-bottom: 20px;">
+      <label style="font-weight: bold; display: block; margin-bottom: 5px;">Myśli i uczucia</label>
+      <textarea placeholder="Twoje myśli i uczucia..." rows="3" class="mock-input" style="width: 100%;"></textarea>
+
+      <!-- Lista rozwijana uczuć NVC -->
+      <div style="margin-top: 10px;">
+        <label style="font-size: 13px; color: #666; display: block; margin-bottom: 5px;">
+          💡 Wybierz uczucia z listy NVC (opcjonalnie):
+        </label>
+        <select class="mock-input" style="width: 100%;">
+          <option>-- Wybierz uczucie --</option>
+          <option>Złość, irytacja, frustracja</option>
+          <option>Smutek, przygnębienie</option>
+          <option>Lęk, strach, niepokój</option>
+          <option>Wstyd, wina, żal</option>
+          <option>Inne...</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Naruszone potrzeby - 4 checkboxy -->
+    <div style="margin-bottom: 20px; padding: 15px; background: #fff3e0; border-radius: 4px;">
+      <label style="font-weight: bold; display: block; margin-bottom: 10px;">Naruszone potrzeby</label>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <input type="checkbox" />
+          <span>Poczucie bezpieczeństwa</span>
+        </label>
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <input type="checkbox" />
+          <span>Potrzeby seksualne</span>
+        </label>
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <input type="checkbox" />
+          <span>Osobiste relacje / potrzeby społeczne</span>
+        </label>
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <input type="checkbox" />
+          <span>Ambicja / duma / prestiż</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Inne potrzeby - lista rozwijana NVC -->
+    <div style="margin-bottom: 20px;">
+      <label style="font-weight: bold; display: block; margin-bottom: 5px;">Inne potrzeby</label>
+      <p style="font-size: 13px; color: #666; margin-bottom: 8px;">
+        💡 Wybierz z listy potrzeb NVC:
+      </p>
+      <select class="mock-input" style="width: 100%;">
+        <option>-- Wybierz potrzebę --</option>
+        <option>Autonomia</option>
+        <option>Akceptacja</option>
+        <option>Bezpieczeństwo</option>
+        <option>Zrozumienie</option>
+        <option>Inne...</option>
+      </select>
+    </div>
+
+    <!-- Wady -->
+    <div style="margin-bottom: 20px;">
+      <label style="font-weight: bold; display: block; margin-bottom: 5px;">Wady</label>
+      <textarea placeholder="..." rows="2" class="mock-input" style="width: 100%;"></textarea>
+    </div>
+
+    <!-- Pozorne korzyści -->
+    <div style="margin-bottom: 20px;">
+      <label style="font-weight: bold; display: block; margin-bottom: 5px;">Pozorne korzyści (błędne przekonania)</label>
+      <textarea placeholder="..." rows="2" class="mock-input" style="width: 100%;"></textarea>
+    </div>
+
+    <!-- Ewidentne straty -->
+    <div style="margin-bottom: 20px;">
+      <label style="font-weight: bold; display: block; margin-bottom: 5px;">Ewidentne straty</label>
+      <textarea placeholder="..." rows="2" class="mock-input" style="width: 100%;"></textarea>
+    </div>
+
+    <!-- Co powinno być (zalety) -->
+    <div style="margin-bottom: 20px;">
+      <label style="font-weight: bold; display: block; margin-bottom: 5px;">Co powinno być (zalety)</label>
+      <textarea placeholder="..." rows="2" class="mock-input" style="width: 100%;"></textarea>
+    </div>
+
+    <!-- Krzywdy - wobec mnie -->
+    <div style="margin-bottom: 20px;">
+      <label style="font-weight: bold; display: block; margin-bottom: 5px;">Krzywdy - wobec mnie (kr 8.5)</label>
+      <textarea placeholder="..." rows="2" class="mock-input" style="width: 100%;"></textarea>
+    </div>
+
+    <!-- Moje wobec otoczenia -->
+    <div style="margin-bottom: 20px;">
+      <label style="font-weight: bold; display: block; margin-bottom: 5px;">Moje wobec otoczenia</label>
+      <textarea placeholder="..." rows="2" class="mock-input" style="width: 100%;"></textarea>
+    </div>
+
+    <!-- Decyzja o wybaczeniu -->
+    <div style="margin-bottom: 20px;">
+      <label style="font-weight: bold; display: block; margin-bottom: 5px;">Decyzja o wybaczeniu / próbie pojednania</label>
+      <textarea placeholder="..." rows="2" class="mock-input" style="width: 100%;"></textarea>
+    </div>
+
+    <!-- Zmiany postawy -->
+    <div style="margin-bottom: 30px;">
+      <label style="font-weight: bold; display: block; margin-bottom: 5px;">Zmiany postawy pod wpływem zalet, w kierunku miłości (twardej lub łagodnej)</label>
+      <textarea placeholder="..." rows="2" class="mock-input" style="width: 100%;"></textarea>
+    </div>
+
+    <!-- Connection scale AFTER (jak w TUP?) -->
+    <div style="margin-bottom: 25px; padding: 15px; background: #f5f5f5; border-radius: 4px;">
+      <label style="font-weight: bold; display: block; margin-bottom: 10px;">
+        Connection Scale (PO)
+      </label>
+      <div style="display: flex; gap: 10px;">
+        <span>0</span>
+        <input type="range" min="0" max="10" style="flex: 1;" />
+        <span>10</span>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display: flex; gap: 15px; margin-top: 30px;">
+      <button class="mock-button" style="flex: 1; padding: 15px; background: #2196f3;">Zapisz</button>
+      <button class="mock-button" style="padding: 15px; background: #66bb6a;">empAItycznie</button>
+    </div>
+
+  </div>
+</div>
+
+<div style="margin-top: 20px; padding: 15px; background: #e3f2fd; border-radius: 4px; font-size: 14px;">
+  <strong>Pytania:</strong><br>
+  1. Czy OK10 też ma connection scale przed i po (jak TUP)?<br>
+  2. Czy listy rozwijane uczuć/potrzeb mają być multi-select (można wybrać kilka) czy single-select?<br>
+  3. Czy są jakieś teksty pomocnicze/instrukcje przy konkretnych polach?
+</div>

@@ -1,7 +1,6 @@
 /**
  * FormPage - Routes to the correct form component based on form type.
  */
-import React from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import TUPForm from '../components/Forms/TUPForm';
 import DUPForm from '../components/Forms/DUPForm';

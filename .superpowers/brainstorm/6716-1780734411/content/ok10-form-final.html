@@ -1,0 +1,321 @@
+<h2>Formularz OK10 - finalna wersja</h2>
+<p class="subtitle">Zwijane listy, pełne dane NVC, poprawiony tekst</p>
+
+<div class="split" style="gap: 30px;">
+  <!-- DESKTOP VIEW -->
+  <div>
+    <h3>Widok desktop</h3>
+    <div class="mockup">
+      <div class="mockup-header">OK10 - Obrachunek wg kroku 10 AA</div>
+      <div class="mockup-body" style="padding: 20px; max-height: 600px; overflow-y: auto; font-size: 13px;">
+
+        <!-- Kto -->
+        <div style="margin-bottom: 15px;">
+          <label style="font-weight: bold; display: block; margin-bottom: 5px;">Kto</label>
+          <input type="text" placeholder="Osoba/osoby..." class="mock-input" style="width: 100%; font-size: 13px;" />
+        </div>
+
+        <!-- Co -->
+        <div style="margin-bottom: 15px;">
+          <label style="font-weight: bold; display: block; margin-bottom: 5px;">Co</label>
+          <textarea placeholder="Co się wydarzyło..." rows="2" class="mock-input" style="width: 100%; font-size: 13px;"></textarea>
+        </div>
+
+        <!-- Myśli i uczucia -->
+        <div style="margin-bottom: 15px;">
+          <label style="font-weight: bold; display: block; margin-bottom: 5px;">Myśli i uczucia</label>
+          <textarea placeholder="Twoje myśli i uczucia..." rows="2" class="mock-input" style="width: 100%; font-size: 13px;"></textarea>
+
+          <!-- ZWINIĘTA sekcja uczuć NVC (domyślnie) -->
+          <div style="margin-top: 10px;">
+            <div style="background: #5c6bc0; color: white; padding: 10px; border-radius: 4px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-weight: bold; font-size: 13px;">Uczucia NVC</span>
+              <span style="font-size: 18px;">▶</span>
+            </div>
+            <!-- Sekcja rozwinięta (ukryta domyślnie, pokazana tylko dla demo) -->
+            <div style="border: 1px solid #5c6bc0; border-top: none; display: none;">
+              <div style="padding: 15px; background: #3949ab; color: white; max-height: 200px; overflow-y: auto;">
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; font-size: 12px;">
+                  <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                    <input type="checkbox" /> współczucie
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                    <input type="checkbox" /> serdeczność
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                    <input type="checkbox" /> otwartość
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                    <input type="checkbox" /> delikatność
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                    <input type="checkbox" /> tkliwość
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                    <input type="checkbox" /> łagodność
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                    <input type="checkbox" /> frustracja
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                    <input type="checkbox" /> irytacja
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                    <input type="checkbox" /> gniew
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                    <input type="checkbox" /> strach
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                    <input type="checkbox" /> lęk
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                    <input type="checkbox" /> ... (112 pozycji)
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Naruszone potrzeby - POZIOMO na desktop -->
+        <div style="margin-bottom: 15px; padding: 12px; background: #f57c00; color: white; border-radius: 4px;">
+          <label style="font-weight: bold; display: block; margin-bottom: 10px;">Naruszone potrzeby</label>
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 12px;">
+              <input type="checkbox" />
+              <span>Poczucie bezpieczeństwa</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 12px;">
+              <input type="checkbox" />
+              <span>Potrzeby seksualne</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 12px;">
+              <input type="checkbox" />
+              <span>Osobiste relacje / potrzeby społeczne</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 12px;">
+              <input type="checkbox" />
+              <span>Ambicja / duma / prestiż</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Inne potrzeby - ZWINIĘTA sekcja (domyślnie) -->
+        <div style="margin-bottom: 15px;">
+          <div style="background: #43a047; color: white; padding: 10px; border-radius: 4px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-weight: bold; font-size: 13px;">Inne potrzeby</span>
+            <span style="font-size: 18px;">▶</span>
+          </div>
+          <!-- Sekcja rozwinięta (ukryta domyślnie) -->
+          <div style="border: 1px solid #43a047; border-top: none; display: none;">
+            <div style="padding: 15px; background: #2e7d32; color: white; max-height: 200px; overflow-y: auto;">
+              <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; font-size: 12px;">
+                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                  <input type="checkbox" /> wybór
+                </label>
+                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                  <input type="checkbox" /> wolność
+                </label>
+                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                  <input type="checkbox" /> niezależność
+                </label>
+                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                  <input type="checkbox" /> przestrzeń
+                </label>
+                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                  <input type="checkbox" /> akceptacja
+                </label>
+                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                  <input type="checkbox" /> zrozumienie
+                </label>
+                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                  <input type="checkbox" /> szacunek
+                </label>
+                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                  <input type="checkbox" /> bezpieczeństwo
+                </label>
+                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                  <input type="checkbox" /> ... (95 pozycji)
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pozostałe pola -->
+        <div style="margin-bottom: 12px;">
+          <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px;">Wady</label>
+          <textarea rows="2" class="mock-input" style="width: 100%; font-size: 12px;"></textarea>
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px;">Pozorne korzyści (błędne przekonania)</label>
+          <textarea rows="2" class="mock-input" style="width: 100%; font-size: 12px;"></textarea>
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px;">Ewidentne straty</label>
+          <textarea rows="2" class="mock-input" style="width: 100%; font-size: 12px;"></textarea>
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px;">Co powinno być (zalety)</label>
+          <textarea rows="2" class="mock-input" style="width: 100%; font-size: 12px;"></textarea>
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px;">Krzywdy - wobec mnie (kr 8.5)</label>
+          <textarea rows="2" class="mock-input" style="width: 100%; font-size: 12px;"></textarea>
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px;">Moje wobec otoczenia</label>
+          <textarea rows="2" class="mock-input" style="width: 100%; font-size: 12px;"></textarea>
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px;">Decyzja o wybaczeniu / próbie pojednania</label>
+          <textarea rows="2" class="mock-input" style="width: 100%; font-size: 12px;"></textarea>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px;">Zmiany postawy pod wpływem zalet, w kierunku miłości (twardej lub łagodnej)</label>
+          <textarea rows="2" class="mock-input" style="width: 100%; font-size: 12px;"></textarea>
+        </div>
+
+        <!-- Tekst końcowy - TEN SAM ROZMIAR jak etykiety (13px) -->
+        <div style="margin-bottom: 20px; padding: 12px; background: #455a64; color: white; border-radius: 4px; font-size: 13px; text-align: center; line-height: 1.6;">
+          Teraz przejrzyj podsumowanie swojego wpisu. Możesz coś dopisać, jeśli chcesz lub kliknąć po feedback empAItyczny.
+          Odczyta on wpisy pierwszych rubryk: do potrzeb włącznie. Nie odniesie się do innych rubryk, bo to nie przestrzeń dla maszyny.
+          Ale może pomóc Ci uzupełnić uczucia lub potrzeby, które mogł_ś przeoczyć.<br><br>
+
+          Rozważ podzielenie się z kimś tym podsumowaniem, osobiście lub przez telefon. Doświadczenie wielu z nas wskazuje,
+          że gdy otwieramy się na drugą osobę, otwieramy się pełniej na Siłę Większą.<br><br>
+
+          Możesz stosować Obrachunek K10 jako pamiętnik, wyłącznie dla siebie. Życzę Ci zarazem, by był narzędziem wzmacniania więzi
+          z Twoją SW, w oparciu o uważną obecność innej osoby.
+        </div>
+
+        <!-- Buttons - wyśrodkowane -->
+        <div style="display: flex; gap: 15px; justify-content: center;">
+          <button class="mock-button" style="padding: 12px 30px; background: #2196f3; color: white; font-size: 13px;">Zapisz</button>
+          <button class="mock-button" style="padding: 12px 30px; background: #66bb6a; color: white; font-size: 14px;">empAItycznie</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE VIEW -->
+  <div>
+    <h3>Widok mobile</h3>
+    <div class="mockup" style="max-width: 380px;">
+      <div class="mockup-header" style="font-size: 14px;">OK10</div>
+      <div class="mockup-body" style="padding: 15px; max-height: 600px; overflow-y: auto; font-size: 13px;">
+
+        <div style="margin-bottom: 15px;">
+          <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px;">Kto</label>
+          <input type="text" class="mock-input" style="width: 100%; font-size: 13px;" />
+        </div>
+
+        <!-- Zwinięta sekcja uczuć (PIONOWO na mobile) -->
+        <div style="margin-bottom: 15px;">
+          <div style="background: #5c6bc0; color: white; padding: 10px; border-radius: 4px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-weight: bold; font-size: 13px;">Uczucia NVC</span>
+            <span style="font-size: 18px;">▶</span>
+          </div>
+          <!-- Ukryte domyślnie -->
+          <div style="border: 1px solid #5c6bc0; border-top: none; display: none;">
+            <div style="padding: 12px; background: #3949ab; color: white; max-height: 200px; overflow-y: auto;">
+              <label style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px; cursor: pointer; font-size: 12px;">
+                <input type="checkbox" /> współczucie
+              </label>
+              <label style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px; cursor: pointer; font-size: 12px;">
+                <input type="checkbox" /> frustracja
+              </label>
+              <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 12px;">
+                <input type="checkbox" /> ... (112 uczuć)
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Naruszone potrzeby - PIONOWO na mobile -->
+        <div style="margin-bottom: 15px; padding: 12px; background: #f57c00; color: white; border-radius: 4px;">
+          <label style="font-weight: bold; display: block; margin-bottom: 10px; font-size: 13px;">Naruszone potrzeby</label>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 12px;">
+              <input type="checkbox" />
+              <span>Poczucie bezpieczeństwa</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 12px;">
+              <input type="checkbox" />
+              <span>Potrzeby seksualne</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 12px;">
+              <input type="checkbox" />
+              <span>Osobiste relacje / potrzeby społeczne</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 12px;">
+              <input type="checkbox" />
+              <span>Ambicja / duma / prestiż</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Inne potrzeby - zwinięte, pionowo -->
+        <div style="margin-bottom: 15px;">
+          <div style="background: #43a047; color: white; padding: 10px; border-radius: 4px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-weight: bold; font-size: 13px;">Inne potrzeby</span>
+            <span style="font-size: 18px;">▶</span>
+          </div>
+          <!-- Ukryte domyślnie -->
+          <div style="border: 1px solid #43a047; border-top: none; display: none;">
+            <div style="padding: 12px; background: #2e7d32; color: white; max-height: 200px; overflow-y: auto;">
+              <label style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px; cursor: pointer; font-size: 12px;">
+                <input type="checkbox" /> wybór
+              </label>
+              <label style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px; cursor: pointer; font-size: 12px;">
+                <input type="checkbox" /> wolność
+              </label>
+              <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 12px;">
+                <input type="checkbox" /> ... (95 potrzeb)
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tekst końcowy - rozmiar 13px -->
+        <div style="margin-bottom: 15px; padding: 10px; background: #455a64; color: white; border-radius: 4px; font-size: 13px; text-align: center; line-height: 1.5;">
+          Teraz przejrzyj podsumowanie swojego wpisu. Możesz coś dopisać, jeśli chcesz lub kliknąć po feedback empAItyczny.
+          Odczyta on wpisy pierwszych rubryk: do potrzeb włącznie. Nie odniesie się do innych rubryk, bo to nie przestrzeń dla maszyny.
+          Ale może pomóc Ci uzupełnić uczucia lub potrzeby, które mogł_ś przeoczyć.<br><br>
+
+          Rozważ podzielenie się z kimś tym podsumowaniem, osobiście lub przez telefon. Doświadczenie wielu z nas wskazuje,
+          że gdy otwieramy się na drugą osobę, otwieramy się pełniej na Siłę Większą.<br><br>
+
+          Możesz stosować Obrachunek K10 jako pamiętnik, wyłącznie dla siebie. Życzę Ci zarazem, by był narzędziem wzmacniania więzi
+          z Twoją SW, w oparciu o uważną obecność innej osoby.
+        </div>
+
+        <!-- Buttons - wyśrodkowane -->
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <button class="mock-button" style="padding: 12px; background: #2196f3; color: white; font-size: 13px;">Zapisz</button>
+          <button class="mock-button" style="padding: 12px; background: #66bb6a; color: white; font-size: 14px;">empAItycznie</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<p style="margin-top: 20px; padding: 15px; background: #e3f2fd; border-radius: 4px; font-size: 14px;">
+  <strong>Finalne poprawki:</strong><br>
+  ✓ Sekcje "Uczucia NVC" i "Inne potrzeby" ZWINIĘTE domyślnie (▶)<br>
+  ✓ Po kliknięciu rozwijają się (▼) i pokazują pełne listy<br>
+  ✓ Pełne 112 uczuć NVC i 95 potrzeb NVC<br>
+  ✓ Tekst końcowy: font-size 13px (jak etykiety)<br>
+  ✓ Desktop: 4 kolumny, Mobile: pionowo<br>
+  ✓ Przyciski wyśrodkowane
+</p>

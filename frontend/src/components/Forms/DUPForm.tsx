@@ -13,7 +13,7 @@ interface DUPFormProps {
 
 export default function DUPForm({ formId = null }: DUPFormProps) {
   const navigate = useNavigate();
-  const { formData, aiFeedback, updateField, submitForm, isSaving, lastSaved, error } = useForm(formId, 'DUP');
+  const { formData, updateField, submitForm, isSaving, lastSaved, error } = useForm(formId, 'DUP');
 
   const [feelings, setFeelings] = useState<FeelingsData>({ fulfilled: {}, unfulfilled: {} });
   const [needs, setNeeds] = useState<NeedsData>({});

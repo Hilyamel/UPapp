@@ -1,7 +1,7 @@
 /**
  * Form summary component - displays all fields with section headers.
  */
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getFormSummary, FormSummary as FormSummaryType, generateAIFeedback, deleteForm } from '../../services/forms';
 

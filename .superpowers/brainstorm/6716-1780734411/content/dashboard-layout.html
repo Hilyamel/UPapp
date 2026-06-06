@@ -1,0 +1,108 @@
+<h2>Where should the OK10 button appear on the dashboard?</h2>
+<p class="subtitle">This shows the current 3 forms plus the new OK10 form</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>4th button in grid (alongside existing forms)</h3>
+      <div class="mockup" style="margin-top: 15px;">
+        <div class="mockup-body" style="padding: 20px;">
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 600px;">
+            <div style="padding: 30px; background: #4a90e2; border-radius: 8px; color: white;">
+              <h3 style="margin: 0 0 10px 0;">TUP</h3>
+              <p style="margin: 0; font-size: 14px;">Tabela Uczuć i Potrzeb</p>
+            </div>
+            <div style="padding: 30px; background: #66bb6a; border-radius: 8px; color: white;">
+              <h3 style="margin: 0 0 10px 0;">DUP</h3>
+              <p style="margin: 0; font-size: 14px;">Dzienniczek Uczuć i Potrzeb</p>
+            </div>
+            <div style="padding: 30px; background: #ffa726; border-radius: 8px; color: white;">
+              <h3 style="margin: 0 0 10px 0;">DOS</h3>
+              <p style="margin: 0; font-size: 14px;">Dziennik Osądów</p>
+            </div>
+            <div style="padding: 30px; background: #ab47bc; border-radius: 8px; color: white;">
+              <h3 style="margin: 0 0 10px 0;">OK10</h3>
+              <p style="margin: 0; font-size: 14px;">Obrachunek wg kroku 10 AA</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons" style="margin-top: 15px;">
+        <div class="pros"><h4>Pros</h4><ul><li>Equal visual weight for all forms</li><li>Familiar pattern - users know where to look</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>OK10 is special/advanced - might get lost</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Separate section below (emphasizes OK10 as advanced tool)</h3>
+      <div class="mockup" style="margin-top: 15px;">
+        <div class="mockup-body" style="padding: 20px;">
+          <h4 style="margin: 0 0 15px 0;">Podstawowe ćwiczenia</h4>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 800px; margin-bottom: 30px;">
+            <div style="padding: 30px; background: #4a90e2; border-radius: 8px; color: white;">
+              <h3 style="margin: 0 0 10px 0;">TUP</h3>
+              <p style="margin: 0; font-size: 14px;">Tabela Uczuć i Potrzeb</p>
+            </div>
+            <div style="padding: 30px; background: #66bb6a; border-radius: 8px; color: white;">
+              <h3 style="margin: 0 0 10px 0;">DUP</h3>
+              <p style="margin: 0; font-size: 14px;">Dzienniczek Uczuć i Potrzeb</p>
+            </div>
+            <div style="padding: 30px; background: #ffa726; border-radius: 8px; color: white;">
+              <h3 style="margin: 0 0 10px 0;">DOS</h3>
+              <p style="margin: 0; font-size: 14px;">Dziennik Osądów</p>
+            </div>
+          </div>
+          <h4 style="margin: 0 0 15px 0; padding-top: 20px; border-top: 2px solid #e0e0e0;">Zaawansowane narzędzie</h4>
+          <div style="display: grid; grid-template-columns: 1fr; max-width: 600px;">
+            <div style="padding: 30px; background: #ab47bc; border-radius: 8px; color: white;">
+              <h3 style="margin: 0 0 10px 0;">OK10</h3>
+              <p style="margin: 0; font-size: 14px;">Obrachunek wg kroku 10 AA</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons" style="margin-top: 15px;">
+        <div class="pros"><h4>Pros</h4><ul><li>Clearly indicates OK10 is special/advanced</li><li>Users won't accidentally click it</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Creates hierarchy where maybe none needed</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>OK10 appears after login, others under "Szybkie akcje"</h3>
+      <div class="mockup" style="margin-top: 15px;">
+        <div class="mockup-body" style="padding: 20px;">
+          <div style="padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; color: white; margin-bottom: 30px;">
+            <h3 style="margin: 0 0 10px 0;">OK10 - Obrachunek wg kroku 10 AA</h3>
+            <p style="margin: 0; font-size: 14px;">Narzędzie do głębszej pracy z urażeniami i pojednaniem</p>
+          </div>
+          <h4 style="margin: 0 0 15px 0;">Szybkie akcje</h4>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+            <div style="padding: 30px; background: #4a90e2; border-radius: 8px; color: white;">
+              <h3 style="margin: 0 0 10px 0;">TUP</h3>
+              <p style="margin: 0; font-size: 14px;">Tabela Uczuć i Potrzeb</p>
+            </div>
+            <div style="padding: 30px; background: #66bb6a; border-radius: 8px; color: white;">
+              <h3 style="margin: 0 0 10px 0;">DUP</h3>
+              <p style="margin: 0; font-size: 14px;">Dzienniczek Uczuć i Potrzeb</p>
+            </div>
+            <div style="padding: 30px; background: #ffa726; border-radius: 8px; color: white;">
+              <h3 style="margin: 0 0 10px 0;">DOS</h3>
+              <p style="margin: 0; font-size: 14px;">Dziennik Osądów</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons" style="margin-top: 15px;">
+        <div class="pros"><h4>Pros</h4><ul><li>OK10 gets maximum visibility and emphasis</li><li>Suggests it's the "main" or most important tool</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>May not match user's mental model if all forms are equally important</li></ul></div>
+      </div>
+    </div>
+  </div>
+</div>

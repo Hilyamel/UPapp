@@ -40,7 +40,7 @@ Create new form component: `frontend/src/components/Forms/OK10Form.tsx`
 1. **Kto** (Who) - text input, single line
 2. **Co** (What) - textarea, 2 rows
 3. **Myśli i uczucia** (Thoughts and feelings) - textarea, 2 rows
-   - Below: Collapsible "Uczucia NVC" list (112 feelings, checkboxes)
+   - Below textarea: Collapsible "Inne uczucia" list (112 feelings, checkboxes)
 4. **Naruszone potrzeby** (Violated needs) - 4 checkboxes in orange box (#f57c00):
    - "Poczucie bezpieczeństwa" (Sense of security)
    - "Potrzeby seksualne" (Sexual needs)
@@ -49,7 +49,6 @@ Create new form component: `frontend/src/components/Forms/OK10Form.tsx`
    - Layout: 4 columns (desktop) / vertical (mobile)
 5. **Inne potrzeby** (Other needs) - textarea, 2 rows (for freetext entry)
    - Below textarea: Collapsible "Potrzeby NVC" list (95 needs, checkboxes)
-   - Note: This section has BOTH freetext textarea AND collapsible NVC list, similar to "Myśli i uczucia" field above
 6. **Wady** (Flaws) - textarea, 2 rows
 7. **Pozorne korzyści (błędne przekonania)** (False benefits / erroneous beliefs) - textarea, 2 rows
 8. **Ewidentne straty** (Evident losses) - textarea, 2 rows
@@ -67,9 +66,9 @@ Create new form component: `frontend/src/components/Forms/OK10Form.tsx`
 ```
 Teraz przejrzyj podsumowanie swojego wpisu. Możesz coś dopisać, jeśli chcesz lub kliknąć po feedback empAItyczny. Odczyta on wpisy pierwszych rubryk: do potrzeb włącznie. Nie odniesie się do innych rubryk, bo to nie przestrzeń dla maszyny. Ale może pomóc Ci uzupełnić uczucia lub potrzeby, które mogł_ś przeoczyć.
 
-Rozważ podzielenie się z kimś tym podsumowaniem, osobiście lub przez telefon. Doświadczenie wielu z nas wskazuje, że gdy otwieramy się na drugą osobę, otwieramy się pełniej na Siłę Większą.
+Rozważ podzielenie się z kimś tym podsumowaniem, osobiście lub przez telefon. Doświadczenie wielu z nas wskazuje, że gdy otwieramy się na inną, uważnie słuchającą osobę, otwieramy się pełniej na Siłę Większą.
 
-Możesz stosować Obrachunek K10 jako pamiętnik, wyłącznie dla siebie. Życzę Ci zarazem, by był narzędziem wzmacniania więzi z Twoją SW, w oparciu o uważną obecność innej osoby.
+Możesz stosować Obrachunek K10 jako pamiętnik, wyłącznie dla siebie. Życzę Ci, by był narzędziem wzmacniania więzi z Twoją SW i z innymi ważnymi dla Ciebie osobami.
 ```
 
 **Action Buttons:**
@@ -125,7 +124,7 @@ interface OK10FormData {
 **Fields sent to Claude API (first 5 fields only):**
 1. `who` (Kto)
 2. `what` (Co)
-3. `thoughts_feelings` (Myśli i uczucia)
+3. `thoughts_feelings` (Myśli i uczucia + selected NVC feelings)
 4. `violated_needs` (Naruszone potrzeby - array of selected checkboxes)
 5. `other_needs` + `needs_nvc_selected` (Inne potrzeby text + selected NVC needs)
 

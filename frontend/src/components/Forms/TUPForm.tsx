@@ -1,7 +1,7 @@
 /**
  * TUP Form (Tabela Uczuć i Potrzeb) component.
  */
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import useForm from '../../hooks/useForm';
 import ConnectionScale from '../Common/ConnectionScale';
@@ -13,7 +13,7 @@ interface TUPFormProps {
 
 export default function TUPForm({ formId = null }: TUPFormProps) {
   const navigate = useNavigate();
-  const { formData, aiFeedback, updateField, submitForm, isSaving, lastSaved, error } = useForm(formId, 'TUP');
+  const { formData, updateField, submitForm, isSaving, lastSaved, error } = useForm(formId, 'TUP');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -1,8 +1,8 @@
 /**
  * T-Table component (T-shaped layout for feelings and needs).
  */
-import React, { useState, useEffect } from 'react';
-import { getFeelings, getNeeds, FeelingsData, NeedsData, Feeling, Need } from '../../services/reference';
+import { useState, useEffect } from 'react';
+import { getFeelings, getNeeds, FeelingsData, NeedsData } from '../../services/reference';
 import CollapsibleList from '../Common/CollapsibleList';
 
 interface TTableProps {

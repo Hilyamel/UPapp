@@ -13,7 +13,7 @@ interface DOSFormProps {
 
 export default function DOSForm({ formId = null }: DOSFormProps) {
   const navigate = useNavigate();
-  const { formData, aiFeedback, updateField, submitForm, isSaving, lastSaved, error } = useForm(formId, 'DOS');
+  const { formData, updateField, submitForm, isSaving, lastSaved, error } = useForm(formId, 'DOS');
 
   const [feelings, setFeelings] = useState<FeelingsData>({ fulfilled: {}, unfulfilled: {} });
   const [needs, setNeeds] = useState<NeedsData>({});

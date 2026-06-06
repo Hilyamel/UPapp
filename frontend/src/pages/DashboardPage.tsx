@@ -17,7 +17,7 @@ export default function DashboardPage() {
   const navigate = useNavigate();
   const [forms, setForms] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showDeleteAccountDialog, setShowDeleteAccountDialog] = useState(false);
+  // const [showDeleteAccountDialog, setShowDeleteAccountDialog] = useState(false);
   const [aiFeedback, setAiFeedback] = useState<string | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
   const [aiError, setAiError] = useState<string | null>(null);
