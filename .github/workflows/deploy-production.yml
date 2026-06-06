@@ -174,10 +174,16 @@ jobs:
           exclude: |
             **/.git*
             **/.git*/**
+            **/.github/**
+            **/.claude/**
+            **/.superpowers/**
+            **/.playwright-mcp/**
             **/node_modules/**
             **/tests/**
             **/test/**
             **/__tests__/**
+            **/specs/**
+            **/docs/**
             **/frontend/src/**
             **/frontend/public/**
             **/frontend/node_modules/**
@@ -189,8 +195,13 @@ jobs:
             **/.env.local
             **/.env.development
             **/README.md
+            **/TEST-*.md
+            **/CLAUDE.md
+            **/DEPLOYMENT.md
+            **/*-prompt.md
             **/backend/tests/**
             **/backend/phpunit.xml
+            **/backend/.phpunit.cache/**
             **/backend/test-*.php
             **/backend/get-*.php
             **/backend/admin-*.php
@@ -201,7 +212,6 @@ jobs:
             **/.vscode/**
             **/.idea/**
             **/coverage/**
-            **/docs/**
 
       - name: 🧹 Verify deployment structure
         run: |
