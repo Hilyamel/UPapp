@@ -2,21 +2,21 @@
 
 namespace UpApp\Repositories;
 
-use Aws\DynamoDb\DynamoDbClient;
+use UpApp\Config\DynamoDBClient;
 use UpApp\Models\Form;
 use UpApp\Config\Environment;
 
 class FormRepository
 {
-    private DynamoDbClient $dynamodb;
+    private $dynamodb;
     private string $tableName;
 
     public function __construct()
     {
-        $this->dynamodb = new DynamoDbClient([
-            'region' => Environment::get('AWS_REGION', 'eu-central-1'),
-            'version' => 'latest',
-        ]);
+        // Use the shared client (passes explicit AWS credentials from .env),
+        // same as UserRepository. Building a bare client here had no credentials
+        // on shared hosting (dotenv nie eksportuje do getenv, a ~/.aws blokuje open_basedir).
+        $this->dynamodb = DynamoDBClient::getInstance();
 
         $prefix = Environment::get('DYNAMODB_TABLE_PREFIX', 'UpApp');
         $env = Environment::get('APP_ENV', 'dev');

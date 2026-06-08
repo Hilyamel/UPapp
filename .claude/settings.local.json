@@ -50,7 +50,10 @@
       "Bash(/tmp/test-session2.sh,)",
       "Bash(pkill -f \"php.*8080\")",
       "Bash(echo \"Backend restarted: $!\")",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(git rebase *)",
+      "Bash(git fetch *)",
+      "Bash(git reset *)"
     ]
   }
 }

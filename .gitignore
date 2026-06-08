@@ -2,6 +2,8 @@
 .env
 .env.local
 .env.*.local
+.env.dev-local
+.env.uat
 
 # Dependencies
 node_modules/
@@ -37,3 +39,6 @@ coverage/
 # Temporary files
 *.tmp
 *.temp
+
+# Deploy folder
+upapp_deploy/

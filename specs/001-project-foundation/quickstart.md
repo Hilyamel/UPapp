@@ -1,8 +1,10 @@
 # Quick Start Guide: UPapp Development
 
-**Last Updated**: 2026-06-02
+**Last Updated**: 2026-06-08
 
 **Purpose**: Get a new developer from zero to running the full UPapp stack locally in under 10 minutes.
+
+**Environments**: This guide covers dev setup. See research.md for uat and prod configurations.
 
 ## Prerequisites
 
@@ -370,3 +372,85 @@ After successful setup:
 - ✅ Browser loads React app successfully
 
 **Congratulations! Your UPapp development environment is ready.**
+
+---
+
+## UAT Environment Setup
+
+### Option 1: Local UAT (Recommended for Testing)
+
+Run UAT environment locally on different ports:
+
+```bash
+# Copy UAT environment file
+cp .env.uat .env
+
+# Start backend on port 8081
+cd backend && php -S localhost:8081 -t public/ &
+
+# Start frontend on port 5174
+cd frontend && npm run dev -- --port 5174
+```
+
+**Verify**: Open http://localhost:5174 and test forms
+
+### Option 2: Dedicated UAT Server
+
+For a separate UAT server (e.g., uat.przetargr-domow.pl):
+
+1. Update `.env.uat` with UAT domain:
+   ```bash
+   APP_ENV=uat
+   APP_URL=https://uat.przetargr-domow.pl
+   BACKEND_URL=https://uat.przetargr-domow.pl/api
+   ```
+
+2. Add UAT domain to CORS in `backend/src/Middleware/CorsMiddleware.php`:
+   ```php
+   'https://uat.przetargr-domow.pl',  // UAT domain
+   ```
+
+3. Deploy to UAT server via same process as production
+
+**Verify**: Visit UAT URL and test dropdown lists load
+
+---
+
+## Troubleshooting
+
+### Dropdown Lists Not Loading
+
+**Symptom**: Forms show empty dropdowns for feelings/needs
+
+**Check**:
+1. Open browser DevTools (F12) → Network tab
+2. Look for failed requests to `/api/reference/feelings` or `/api/reference/needs`
+
+**Common Causes**:
+- **CORS error**: Add your domain to `backend/src/Middleware/CorsMiddleware.php`
+- **Wrong API URL**: Verify `VITE_API_URL` matches your backend URL
+- **Missing data files**: Verify `data/lista_uczuc.json` and `data/lista_potrzeb.json` exist
+
+### DynamoDB Connection Fails
+
+**Check AWS credentials**:
+```bash
+aws dynamodb list-tables --region eu-central-1
+```
+
+**If fails**: Run `aws configure` to set up credentials
+
+### Port Already in Use
+
+**Frontend (5173)**:
+```bash
+# Kill process using port 5173
+npx kill-port 5173
+```
+
+**Backend (8080)**:
+```bash
+# Kill PHP process
+pkill -f "php -S localhost:8080"
+```
+

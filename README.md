@@ -119,6 +119,39 @@ The empAItycznie button uses Claude AI to provide empathetic NVC feedback on for
 - [Feature Specifications](specs/) - Feature designs and plans
 - [Quick Start Guide](specs/001-project-foundation/quickstart.md) - Detailed setup
 
+## Troubleshooting
+
+### Dropdown lists not loading (feelings / needs)
+
+If dropdowns in any form (DUP, TUP, DOS, OK10) are empty:
+
+1. Open DevTools → Network tab and look for failed requests to `/api/reference/feelings` or `/api/reference/needs`
+2. **CORS error**: add your domain to `$allowedOrigins` in `backend/src/Middleware/CorsMiddleware.php`
+3. **404**: verify `data/lista_uczuc.json` and `data/lista_potrzeb.json` are deployed to the server
+4. **500**: check PHP error logs; usually a file-permission issue on the `data/` directory
+
+### Environments
+
+| | dev-local | uat | prod |
+|-|-----------|-----|------|
+| Config file | `.env.dev-local` → copy to `.env` | `.env.uat` → copy to `.env` on UAT server | `.env.production.example` → copy to `.env` on prod server |
+| `APP_ENV` | `dev` | `uat` | `prod` |
+| DynamoDB tables | `UpApp.dev.*` | `UpApp.uat.*` | `UpApp.prod.*` |
+| Hosted on | localhost | FTP server | FTP server |
+
+### Running tests
+
+```bash
+# Backend unit tests
+cd backend && vendor/bin/phpunit --testsuite Unit
+
+# Frontend tests
+cd frontend && npm run test
+
+# All tests
+npm test
+```
+
 ## License
 
 [Add license information]

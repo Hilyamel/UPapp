@@ -1,5 +1,12 @@
 <?php
 
+// Produkcja: nie wypuszczaj ostrzezen PHP do JSON
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
+putenv('HOME=' . dirname(__DIR__));
+putenv('AWS_CONFIG_FILE=' . dirname(__DIR__) . '/.aws-config');
+putenv('AWS_SHARED_CREDENTIALS_FILE=' . dirname(__DIR__) . '/.aws-credentials');
+
 /**
  * Simple health check endpoint for deployment verification
  */

@@ -33,10 +33,10 @@
 
 **Purpose**: Configure development environment properly
 
-- [ ] T007 [DEV1] Verify .env has APP_ENV=dev
-- [ ] T008 [DEV1] Verify DynamoDB dev tables exist: UpApp.dev.users, UpApp.dev.forms
-- [ ] T009 [DEV1] Test local servers start and dropdowns load
-- [ ] T010 [DEV1] Update quickstart.md with dev setup instructions
+- [X] T007 [DEV1] Verify .env has APP_ENV=dev
+- [X] T008 [DEV1] Verify DynamoDB dev tables exist: UpApp.dev.users, UpApp.dev.forms
+- [X] T009 [DEV1] Test local servers start and dropdowns load
+- [X] T010 [DEV1] Update quickstart.md with dev setup instructions
 
 **Checkpoint**: Dev environment functional
 
@@ -46,10 +46,10 @@
 
 **Purpose**: Configure UAT environment for testing
 
-- [ ] T011 [P] [UAT1] Create .env.uat template file
-- [ ] T012 [P] [UAT1] Document UAT setup in quickstart.md
-- [ ] T013 [UAT1] Verify DynamoDB UAT tables exist
-- [ ] T014 [UAT1] Test UAT environment and dropdowns
+- [X] T011 [P] [UAT1] Create .env.uat template file
+- [X] T012 [P] [UAT1] Document UAT setup in quickstart.md
+- [X] T013 [UAT1] Verify DynamoDB UAT tables exist
+- [X] T014 [UAT1] Test UAT environment and dropdowns
 
 **Checkpoint**: UAT environment functional
 
@@ -59,11 +59,11 @@
 
 **Purpose**: Add tests and complete documentation
 
-- [ ] T015 [P] [TEST1] Setup PHPUnit in backend/tests/
-- [ ] T016 [P] [TEST1] Write test for ReferenceHandler::getFeelings()
-- [ ] T017 [P] [TEST1] Write test for CollapsibleList component
-- [ ] T018 [P] Update README.md with troubleshooting
-- [ ] T019 Run full test suite
+- [X] T015 [P] [TEST1] Setup PHPUnit in backend/tests/
+- [X] T016 [P] [TEST1] Write test for ReferenceHandler::getFeelings()
+- [X] T017 [P] [TEST1] Write test for CollapsibleList component
+- [X] T018 [P] Update README.md with troubleshooting
+- [X] T019 Run full test suite
 
 ---
 
