@@ -1,247 +1,450 @@
-# Research: Project Foundation
+# Research: Dropdown Lists Fix & Environment Setup
 
-**Created**: 2026-06-02
+**Date**: 2026-06-07
+**Feature**: 001-project-foundation
+**Phase**: Phase 0 - Research & Root Cause Analysis
 
-**Purpose**: Document technology choices, rationale, and alternatives considered for the UPapp project foundation.
+## Executive Summary
 
-## Technology Decisions
+**Root Cause Identified**: CORS configuration in backend does not include production domain `https://przetargr-domow.pl`, causing browser to block API requests from frontend to backend.
 
-### Frontend Framework: React 18 + Vite + TypeScript
+**Impact**: All dropdown lists (feelings and needs) fail to load in production forms (DUP, TUP, DOS, OK10) because the frontend cannot fetch data from `/api/reference/feelings` and `/api/reference/needs` endpoints.
 
-**Decision**: Use React 18 with Vite build tool and TypeScript for type safety.
+**Fix Strategy**: 
+1. Add production domain to CORS allowed origins in `CorsMiddleware.php`
+2. Ensure `APP_URL` environment variable is correctly set in production `.env`
+3. Standardize deployment configuration across scripts and workflows
 
-**Rationale**:
-- React 18 provides modern hooks, concurrent features, and excellent ecosystem
-- Vite offers significantly faster dev server startup (<5s vs 30s+ with Webpack)
-- TypeScript catches errors at compile time, improving code quality and maintainability
-- PrimeReact component library (requirement) has first-class React support
-- Large community and extensive documentation reduce onboarding time
+---
+
+## Investigation Results
+
+### 1. Root Cause: CORS Configuration Mismatch
+
+**Decision**: CORS blocking is the primary issue preventing dropdown lists from working in production.
+
+**Rationale**: 
+- Production frontend runs on `https://przetargr-domow.pl`
+- Backend CORS middleware (`backend/src/Middleware/CorsMiddleware.php:32-46`) only allows:
+  - `http://localhost:5173` (dev)
+  - `http://localhost:5174` (dev)
+  - `http://localhost:5175` (dev)
+  - `http://localhost:3000` (dev)
+  - Value from `Environment::get('APP_URL')` as fallback
+- Production domain is NOT in the hardcoded list
+- If `APP_URL` is not set correctly in production `.env`, CORS fails
+
+**Evidence**:
+```php
+// backend/src/Middleware/CorsMiddleware.php:32-46
+$allowedOrigins = [
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'http://localhost:5175',
+    'http://localhost:3000',
+];
+
+$origin = $request->getHeaderLine('Origin');
+$appUrl = Environment::get('APP_URL');
+
+if ($appUrl && !in_array($appUrl, $allowedOrigins)) {
+    $allowedOrigins[] = $appUrl;
+}
+```
 
 **Alternatives Considered**:
-- **Vue 3 + Vite**: Rejected - PrimeReact requirement mandates React
-- **Next.js**: Rejected - adds unnecessary complexity for SPA use case, requires Node.js runtime for SSR (shared hosting constraint)
-- **Create React App**: Rejected - deprecated, slower build times, Vite is modern replacement
-
-**Best Practices**:
-- Use functional components with hooks (no class components)
-- Implement code splitting via `React.lazy()` for route-level components
-- Use `React.StrictMode` in development to catch potential issues
-- Follow React 18 best practices for `useEffect` cleanup and dependency arrays
+- **Alternative 1**: Allow all origins with `Access-Control-Allow-Origin: *`
+  - **Rejected**: Security risk; allows any website to call backend API
+- **Alternative 2**: Use environment variable only (remove hardcoded localhost)
+  - **Rejected**: Makes local development harder (need to set APP_URL)
+- **Alternative 3**: Add production domain to hardcoded list + keep APP_URL fallback
+  - **SELECTED**: Best balance of security and flexibility
 
 ---
 
-### Backend Framework: PHP 8.1 + Slim Framework 4
+### 2. Deployment Configuration Inconsistency
 
-**Decision**: PHP 8.1 with Slim Framework 4 for lightweight REST API routing.
+**Decision**: Standardize on `https://przetargr-domow.pl` as production domain.
 
 **Rationale**:
-- PHP 8.1 provides modern features (enums, readonly properties, fibers) while maintaining wide hosting compatibility
-- Slim 4 is minimalist (routes + middleware) with no ORM/template baggage - perfect for API-only backend
-- Shared hosting constraint requires traditional PHP (no Node.js server-side runtime available)
-- AWS SDK for PHP works seamlessly with any framework
-- Low memory footprint (<50MB) suitable for shared hosting
+- GitHub Actions workflow (`.github/workflows/deploy-production.yml:82`) uses `VITE_API_URL=https://przetargr-domow.pl/api`
+- Shell deployment script (`deploy.sh:9`) uses `VITE_API_URL=https://upapp.mindincoach.com/api`
+- Example environment file (`.env.production.example:6`) uses `APP_URL=https://upapp.mindincoach.com`
+- **Current production**: Domain is `przetargr-domow.pl` (verified from CORS error context)
+
+**Evidence**:
+```bash
+# deploy.sh:9
+VITE_API_URL=https://upapp.mindincoach.com/api npm run build
+
+# .github/workflows/deploy-production.yml:82
+VITE_API_URL: https://przetargr-domow.pl/api
+```
 
 **Alternatives Considered**:
-- **Laravel**: Rejected - too heavy (full MVC framework, 100MB+ memory), unnecessary features (Eloquent ORM, Blade templates)
-- **Symfony**: Rejected - heavy framework, complex configuration
-- **Plain PHP (no framework)**: Considered but rejected - Slim's routing and middleware simplify API structure without bloat
+- **Alternative 1**: Use `upapp.mindincoach.com` everywhere
+  - **Rejected**: Requires DNS change and potential SSL certificate update
+- **Alternative 2**: Use `przetargr-domow.pl` everywhere
+  - **SELECTED**: Matches current production; minimal changes required
 
-**Best Practices**:
-- Use PSR-7 HTTP message interfaces (Slim standard)
-- Implement PSR-15 middleware for cross-cutting concerns (CORS, error handling)
-- Follow PSR-12 coding standards (enforced via PHP_CodeSniffer)
-- Use dependency injection container (Slim built-in) for testability
+**Required Actions**:
+1. Update `deploy.sh` to use `https://przetargr-domow.pl/api`
+2. Update `.env.production.example` to use `https://przetargr-domow.pl`
+3. Verify production `.env` has `APP_URL=https://przetargr-domow.pl`
 
 ---
 
-### UI Component Library: PrimeReact 10
+### 3. Backend Data File Path Resolution
 
-**Decision**: PrimeReact 10 with PrimeIcons and Font Awesome for icons.
+**Decision**: Current implementation is correct; no changes needed.
 
 **Rationale**:
-- **Requirement**: Explicitly specified in project constraints
-- Comprehensive component library (100+ components) reduces custom UI code
-- Accessible by default (WCAG AA compliance) aligns with constitution
-- Theming system supports customization for NVC branding
-- Active development and strong community support
+- `ReferenceHandler.php` uses relative path: `__DIR__ . '/../../../data'`
+- This resolves correctly from `backend/src/Handlers/ReferenceHandler.php` to project root `data/`
+- Both data files exist and are readable:
+  - `data/lista_uczuc.json` (13,663 bytes)
+  - `data/lista_potrzeb.json` (8,639 bytes)
 
-**Integration Strategy**:
-- Import PrimeReact CSS in main entry point
-- Use tree-shaking to include only used components in bundle
-- Combine PrimeIcons (included) with Font Awesome for icon coverage
-- Create reusable component wrappers for common patterns (forms, dialogs)
+**Evidence**:
+```php
+// backend/src/Handlers/ReferenceHandler.php:14
+$this->dataDir = __DIR__ . '/../../../data';
+```
+
+**Verification**:
+```bash
+$ ls -la data/
+-rw-r--r-- 1 user 4096  8639 Jun  6 13:04 lista_potrzeb.json
+-rw-r--r-- 1 user 4096 13663 Jun  6 13:04 lista_uczuc.json
+```
+
+**Alternatives Considered**: N/A (current implementation works)
 
 ---
 
-### State Management: React Context (No External Library Initially)
+### 4. Frontend API Client Configuration
 
-**Decision**: Start with React Context API + `useReducer` for global state. Add external library only if justified.
+**Decision**: Current implementation is correct; no changes needed.
 
 **Rationale**:
-- Constitution principle: Dependency minimalism - no state library unless justified
-- React Context sufficient for initial scope (auth state, environment config)
-- Adding Redux/Zustand/MobX later is straightforward if complexity grows
-- Reduces bundle size and learning curve for new developers
+- Frontend uses Vite environment variable: `import.meta.env.VITE_API_URL`
+- Fallback to localhost for development: `import.meta.env.VITE_API_URL || 'http://localhost:8080'`
+- Build-time injection via `.env.production` or `VITE_API_URL` environment variable
+- This pattern is standard for Vite applications
 
-**When to Reconsider**:
-- More than 5 deeply nested context providers
-- Performance issues from frequent context updates
-- Complex async state management patterns emerge
+**Evidence**:
+```typescript
+// frontend/src/services/api.ts:5
+const apiClient = axios.create({
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8080',
+  timeout: 10000,
+  withCredentials: true,
+});
+```
 
-**Best Practices**:
-- Separate contexts by domain (AuthContext, ConfigContext)
-- Use `useReducer` for complex state logic
-- Memoize context values to prevent unnecessary re-renders
-- Document when to split contexts or add external state library
-
----
-
-### Environment Configuration: vlucas/phpdotenv + Vite Env Variables
-
-**Decision**: Use `vlucas/phpdotenv` for PHP environment loading, Vite's built-in env variable support for frontend.
-
-**Rationale**:
-- `phpdotenv` is standard PHP solution (7k+ GitHub stars, widely adopted)
-- Vite natively supports `.env` files with `VITE_` prefix for frontend variables
-- Single `.env` file at project root reduces configuration complexity
-- `.env_dist` template approach prevents accidental secret commits
-
-**Environment Variable Strategy**:
-- Backend: All vars accessible via `$_ENV` after `phpdotenv` load
-- Frontend: Only `VITE_*` prefixed vars exposed (security - prevents backend secrets leaking to client)
-- Validation: Backend checks required vars on startup, fails fast with clear error messages
-
-**Best Practices**:
-- Never commit `.env` (gitignored)
-- Keep `.env_dist` updated with all required variables (placeholder values)
-- Use descriptive comments in `.env_dist` for each variable
-- Fail application startup if required variables missing
+**Alternatives Considered**: N/A (current implementation follows best practices)
 
 ---
 
-### DynamoDB Client: AWS SDK for PHP v3
+## Environment Configuration Analysis
 
-**Decision**: AWS SDK for PHP v3 with DynamoDbClient for database operations.
+### Current State
 
-**Rationale**:
-- Official AWS SDK maintained by Amazon, guaranteed compatibility
-- Version 3 uses PSR-7 interfaces, integrates cleanly with Slim
-- No ORM requirement (constitution) - SDK provides direct table operations
-- Async support via promises (future optimization path)
+| Environment | APP_ENV | APP_URL | BACKEND_URL | DynamoDB Tables | Status |
+|-------------|---------|---------|-------------|-----------------|--------|
+| **Production** | `prod` (needs verification) | `https://przetargr-domow.pl` (should be set) | `https://przetargr-domow.pl/api` | `UpApp.prod.*` | ⚠️ Partial (CORS broken) |
+| **UAT** | Not configured | Not set | Not set | `UpApp.uat.*` (exist in AWS) | ❌ Not set up |
+| **Dev** | `dev` | `http://localhost:5173` | `http://localhost:8080` | `UpApp.dev.*` (exist in AWS) | ✅ Working locally |
 
-**Table Naming Strategy**:
-- Prefix: `UpApp.<ENV>.` where ENV is `dev`, `uat`, or `prod`
-- Example: `UpApp.dev.users`, `UpApp.prod.forms`
-- Environment variable: `DYNAMODB_TABLE_PREFIX=UpApp` combined with `APP_ENV`
+### Required Environment Variables
 
-**Connection Management**:
-- Single DynamoDbClient instance per request (created in dependency container)
-- Credentials loaded from AWS CLI profile or `.env` (fallback)
-- Region: `eu-central-1` (specified in project requirements)
+#### Production `.env`
+```bash
+APP_ENV=prod
+APP_URL=https://przetargr-domow.pl
+AWS_REGION=eu-central-1
+AWS_ACCESS_KEY_ID=<production-key>
+AWS_SECRET_ACCESS_KEY=<production-secret>
+DYNAMODB_TABLE_PREFIX=UpApp
+BACKEND_URL=https://przetargr-domow.pl/api
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USERNAME=<production-email>
+SMTP_PASSWORD=<production-password>
+SMTP_FROM_EMAIL=noreply@przetargr-domow.pl
+SMTP_FROM_NAME=UPapp
+ADMIN_EMAIL=janczewski.piotr@gmail.com
+ADMIN_ALLOWED_EMAILS=janczewski.piotr@gmail.com
+```
 
----
+#### UAT `.env.uat`
+```bash
+APP_ENV=uat
+APP_URL=http://uat.przetargr-domow.pl  # Or localhost:5174 for local UAT
+AWS_REGION=eu-central-1
+AWS_ACCESS_KEY_ID=<uat-key-or-empty-for-cli>
+AWS_SECRET_ACCESS_KEY=<uat-secret-or-empty-for-cli>
+DYNAMODB_TABLE_PREFIX=UpApp
+BACKEND_URL=http://localhost:8081  # Or UAT backend URL
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USERNAME=<uat-email>
+SMTP_PASSWORD=<uat-password>
+SMTP_FROM_EMAIL=noreply@uat.upapp.local
+SMTP_FROM_NAME=UPapp UAT
+ADMIN_EMAIL=janczewski.piotr@gmail.com
+ADMIN_ALLOWED_EMAILS=janczewski.piotr@gmail.com
+```
 
-### Testing Frameworks: Vitest (Frontend) + PHPUnit (Backend)
-
-**Decision**: Vitest for frontend testing, PHPUnit for backend testing.
-
-**Rationale**:
-- **Vitest**: Vite-native test runner, faster than Jest, same API (easy migration if needed)
-- **PHPUnit**: Industry standard for PHP testing, excellent DynamoDB mocking support
-- Both support integration testing against real DynamoDB `dev` tables (constitution requirement)
-
-**Testing Strategy**:
-- Frontend: Component tests (render + interactions), integration tests (API calls)
-- Backend: Unit tests (business logic), integration tests (DynamoDB operations)
-- **No mocking** of DynamoDB in integration tests - use `UpApp.dev.*` tables
-- Test environment variable: `APP_ENV=test` triggers test-specific configuration
-
----
-
-### Code Quality Tools: ESLint + Prettier (Frontend), PHP_CodeSniffer (Backend)
-
-**Decision**: ESLint + Prettier for TypeScript/React, PHP_CodeSniffer for PSR-12 enforcement.
-
-**Rationale**:
-- Constitution requirement: code quality from project inception
-- ESLint catches logical errors and anti-patterns
-- Prettier removes formatting debates (auto-format on save)
-- PHP_CodeSniffer enforces PSR-12 standards (constitution requirement)
-
-**Pre-commit Hook Strategy**:
-- Use `husky` + `lint-staged` to run linters on staged files only
-- Block commits with linting errors
-- Auto-fix Prettier issues when possible
-
-**Configuration**:
-- ESLint: TypeScript + React plugins, extend recommended rules
-- Prettier: 2-space indentation, single quotes, trailing commas
-- PHP_CodeSniffer: PSR-12 ruleset, 4-space indentation
-
----
-
-### Development Scripts: Cross-Platform (Bash + PowerShell)
-
-**Decision**: Provide both Bash and PowerShell versions of infrastructure scripts (`aws-setup`, `seed`, `deploy`).
-
-**Rationale**:
-- Developer constraint: Windows/Mac/Linux support required
-- Bash: Standard on Mac/Linux, available via Git Bash on Windows
-- PowerShell: Native on Windows, available on Mac/Linux (PowerShell Core)
-- `package.json` scripts detect platform and run appropriate version
-
-**Script Patterns**:
-- Error handling: Exit on first error (`set -e` in bash, `$ErrorActionPreference='Stop'` in PowerShell)
-- Environment detection: Check `APP_ENV`, default to `dev`, prompt if `prod`
-- AWS CLI validation: Check AWS CLI installed before running DynamoDB commands
-- Idempotency: Scripts safe to run multiple times (check existence before creating)
+#### Dev `.env` (current)
+```bash
+APP_ENV=dev
+APP_URL=http://localhost:5173
+AWS_REGION=eu-central-1
+AWS_ACCESS_KEY_ID=  # Empty to use AWS CLI profile
+AWS_SECRET_ACCESS_KEY=  # Empty to use AWS CLI profile
+DYNAMODB_TABLE_PREFIX=UpApp
+BACKEND_URL=http://localhost:8080
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USERNAME=<dev-email>
+SMTP_PASSWORD=<dev-password>
+SMTP_FROM_EMAIL=noreply@upapp.local
+SMTP_FROM_NAME=UPapp Dev
+ADMIN_EMAIL=janczewski.piotr@gmail.com
+ADMIN_ALLOWED_EMAILS=janczewski.piotr@gmail.com
+```
 
 ---
 
-### HTTP Client: Axios (Frontend)
+## CORS Configuration Review
 
-**Decision**: Axios for frontend HTTP requests to backend API.
+### Current Implementation
 
-**Rationale**:
-- More ergonomic than `fetch` (automatic JSON parsing, request/response interceptors)
-- Built-in request cancellation (useful for search/autocomplete features)
-- Consistent error handling across requests
-- TypeScript support via `@types/axios`
+**File**: `backend/src/Middleware/CorsMiddleware.php`
 
-**Configuration**:
-- Base URL from environment variable: `VITE_API_URL` (defaults to `http://localhost:8080`)
-- Request interceptor: Add `Authorization` header when token present
-- Response interceptor: Handle common errors (401 redirect to login, 500 error toast)
+```php
+public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+{
+    $allowedOrigins = [
+        'http://localhost:5173',
+        'http://localhost:5174',
+        'http://localhost:5175',
+        'http://localhost:3000',
+    ];
 
-**Alternatives Considered**:
-- **fetch API**: Native, but less ergonomic (manual JSON parsing, verbose error handling)
-- **SWR/React Query**: Deferred to future iteration (adds caching complexity)
+    $origin = $request->getHeaderLine('Origin');
+    $appUrl = Environment::get('APP_URL');
+
+    if ($appUrl && !in_array($appUrl, $allowedOrigins)) {
+        $allowedOrigins[] = $appUrl;
+    }
+
+    $response = $handler->handle($request);
+
+    if (in_array($origin, $allowedOrigins)) {
+        $response = $response
+            ->withHeader('Access-Control-Allow-Origin', $origin)
+            ->withHeader('Access-Control-Allow-Credentials', 'true')
+            ->withHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With')
+            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    }
+
+    if ($request->getMethod() === 'OPTIONS') {
+        return $response->withStatus(200);
+    }
+
+    return $response;
+}
+```
+
+### Issue Analysis
+
+1. **Hardcoded localhost origins**: Good for development
+2. **APP_URL fallback**: Good for flexibility
+3. **Missing production domain**: `https://przetargr-domow.pl` not in list
+4. **Dependency on environment variable**: If `APP_URL` is missing/wrong in production `.env`, CORS fails
+
+### Recommended Fix
+
+**Option A - Add production domain to hardcoded list (RECOMMENDED)**:
+```php
+$allowedOrigins = [
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'http://localhost:5175',
+    'http://localhost:3000',
+    'https://przetargr-domow.pl',  // Production
+];
+```
+
+**Option B - Rely only on APP_URL environment variable**:
+- Remove hardcoded list
+- Require `APP_URL` in all environments
+- More flexible but harder to debug
+
+**Decision**: Use Option A for immediate fix, ensure `APP_URL` is set correctly as defense-in-depth.
 
 ---
 
-### Port Configuration: 5173 (Frontend) + 8080 (Backend)
+## Data File Deployment Verification
 
-**Decision**: React dev server on port 5173 (Vite default), PHP server on port 8080.
+### Verification Results
 
-**Rationale**:
-- 5173: Vite default, widely recognized in React community
-- 8080: Common alternative HTTP port, unlikely to conflict with system services
-- Constitution requirement: FR-013 (frontend 5173), FR-014 (backend 8080)
+✅ **Data files exist in repository**:
+```bash
+data/lista_uczuc.json       # 13,663 bytes, 141 feelings
+data/lista_potrzeb.json     # 8,639 bytes, 80 needs
+```
 
-**Port Conflict Handling**:
-- Vite auto-increments port if 5173 taken (5174, 5175, etc.)
-- PHP server: Check port availability, suggest alternatives if 8080 taken
-- Document port configuration in README
+✅ **File structure matches API expectations**:
+```json
+// lista_uczuc.json
+[
+  {
+    "name_pl": "współczucie",
+    "category": "fulfilled",
+    "subcategory": "Czułość",
+    "sort_order": 1
+  },
+  ...
+]
+
+// lista_potrzeb.json
+[
+  {
+    "name_pl": "wolność",
+    "category": "Autonomia",
+    "sort_order": 1
+  },
+  ...
+]
+```
+
+✅ **Backend correctly groups data**:
+- Feelings: Grouped by `category` (fulfilled/unfulfilled) → `subcategory` → items
+- Needs: Grouped by `category` → items
+- Uses `name_pl` as ID (since no UUID field exists)
+
+✅ **Deployment process includes data directory**:
+- `.gitignore` does NOT exclude `data/` directory
+- Deployment script (`deploy.sh`) copies entire project including `data/`
+- GitHub Actions workflow includes data files in artifact
+
+**No action required for data file deployment**.
 
 ---
 
-## Open Questions
+## Fix Recommendations
 
-*None remaining - all technical decisions resolved for project foundation scope.*
+### Priority 1: Fix CORS (Immediate - Production is broken)
 
-## Next Steps
+**Changes Required**:
 
-Proceed to Phase 1: Design & Contracts
-- Define data-model.md (initial DynamoDB tables)
-- Create contracts/health-check.md (initial API contract)
-- Generate quickstart.md (developer onboarding)
+1. **Update CorsMiddleware.php** to include production domain:
+   ```php
+   // backend/src/Middleware/CorsMiddleware.php:32
+   $allowedOrigins = [
+       'http://localhost:5173',
+       'http://localhost:5174',
+       'http://localhost:5175',
+       'http://localhost:3000',
+       'https://przetargr-domow.pl',  // ADD THIS LINE
+   ];
+   ```
+
+2. **Verify production .env** has correct APP_URL:
+   ```bash
+   APP_URL=https://przetargr-domow.pl
+   ```
+
+3. **Deploy updated backend** to production immediately
+
+**Testing**:
+```bash
+# Test CORS headers with curl
+curl -I -X OPTIONS \
+  -H "Origin: https://przetargr-domow.pl" \
+  -H "Access-Control-Request-Method: GET" \
+  https://przetargr-domow.pl/api/reference/feelings
+
+# Expected response should include:
+# Access-Control-Allow-Origin: https://przetargr-domow.pl
+# Access-Control-Allow-Credentials: true
+```
+
+### Priority 2: Standardize Deployment Configuration (High)
+
+**Changes Required**:
+
+1. **Update deploy.sh**:
+   ```bash
+   # Line 9: Change from upapp.mindincoach.com to przetargr-domow.pl
+   VITE_API_URL=https://przetargr-domow.pl/api npm run build
+   ```
+
+2. **Update .env.production.example**:
+   ```bash
+   # Line 6: Change to production domain
+   APP_URL=https://przetargr-domow.pl
+   ```
+
+3. **Verify GitHub Actions workflow** (already correct):
+   ```yaml
+   # .github/workflows/deploy-production.yml:82
+   VITE_API_URL: https://przetargr-domow.pl/api  # ✅ Correct
+   ```
+
+### Priority 3: Set Up UAT Environment (Medium)
+
+**Changes Required**:
+
+1. Create `.env.uat` file (copy from `.env_dist`, set `APP_ENV=uat`)
+2. Decide UAT deployment strategy:
+   - **Option A**: Local UAT (run on localhost:5174 with APP_ENV=uat)
+   - **Option B**: Dedicated UAT server (subdomain or separate server)
+3. Update CORS middleware to include UAT origin if using separate domain
+4. Document UAT setup process in `quickstart.md`
+
+### Priority 4: Add Automated Tests (Low)
+
+**Changes Required**:
+
+1. **PHPUnit tests for ReferenceHandler**:
+   - Test feelings endpoint returns grouped data
+   - Test needs endpoint returns grouped data
+   - Test 404 when data files missing
+   - Test JSON parsing errors
+
+2. **Vitest tests for CollapsibleList**:
+   - Test rendering with feelings data
+   - Test rendering with needs data
+   - Test checkbox selection/deselection
+   - Test expand/collapse functionality
+
+3. **Integration test for reference API**:
+   - Test CORS headers on OPTIONS request
+   - Test CORS headers on GET request
+   - Test API response structure matches contract
+
+---
+
+## Success Metrics
+
+### Phase 0 Complete ✅
+- [x] Root cause identified: CORS configuration mismatch
+- [x] Environment comparison table created
+- [x] CORS configuration documented with fix
+- [x] Data file deployment verified (no issues)
+- [x] Fix recommendations documented
+
+### Next Steps (Phase 1)
+- [ ] Create `data-model.md` with feelings/needs entity structure
+- [ ] Create `contracts/reference-api.md` with API specifications
+- [ ] Create `contracts/error-handling.md` with error response formats
+- [ ] Create `quickstart.md` with environment setup guides
+- [ ] Update `CLAUDE.md` with plan reference
+
+---
+
+**Version**: 1.0.0 | **Created**: 2026-06-07 | **Status**: Complete

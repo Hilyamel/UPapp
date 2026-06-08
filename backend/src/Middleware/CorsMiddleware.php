@@ -28,13 +28,14 @@ class CorsMiddleware implements MiddlewareInterface
 
     private function addCorsHeaders(ResponseInterface $response): ResponseInterface
     {
-        // Support multiple development origins
+        // Support multiple development origins + production
         $allowedOrigins = [
             Environment::get('APP_URL', 'http://localhost:5173'),
             'http://localhost:5173',
             'http://localhost:5174',
             'http://localhost:5175',
             'http://localhost:3000',
+            'https://przetargr-domow.pl',  // Production domain
         ];
 
         // Get Origin from request

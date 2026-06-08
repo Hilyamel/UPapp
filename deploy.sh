@@ -6,7 +6,7 @@ echo ""
 # Build frontend
 echo "📦 Building frontend..."
 cd frontend
-VITE_API_URL=https://upapp.mindincoach.com/api npm run build
+VITE_API_URL=https://przetargr-domow.pl/api npm run build
 cd ..
 
 # Install backend dependencies

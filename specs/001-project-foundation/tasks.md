@@ -1,4 +1,83 @@
-# Tasks: Project Foundation
+# Tasks: Dropdown Lists Fix & Environment Setup
+
+**Feature**: 001-project-foundation  
+**Date**: 2026-06-07  
+**Status**: Ready for implementation
+
+**Input**: UPapp is in production but dropdown lists broken; need to fix CORS and set up dev/uat environments
+
+**Organization**: Tasks organized by urgency - production fix first, then environment setup
+
+## Format: `[ID] [P?] [Story] Description`
+- **[P]**: Can run in parallel  
+- **[Story]**: PROD1 (prod fix), DEV1 (dev setup), UAT1 (uat setup), CONFIG1 (config), TEST1 (tests)
+
+---
+
+## Phase 1: Production Fix (URGENT)
+
+**Purpose**: Fix broken dropdown lists in production
+
+- [X] T001 [PROD1] Update CORS middleware to include https://przetargr-domow.pl in backend/src/Middleware/CorsMiddleware.php line 32
+- [X] T002 [PROD1] Verify production .env has APP_ENV=prod and APP_URL=https://przetargr-domow.pl
+- [X] T003 [PROD1] Update deploy.sh line 9 to use VITE_API_URL=https://przetargr-domow.pl/api
+- [ ] T004 [PROD1] Deploy updated backend to production via npm run deploy
+- [ ] T005 [PROD1] Test CORS headers with curl on production API
+- [ ] T006 [PROD1] Verify dropdown lists load in all production forms (DUP, TUP, DOS, OK10)
+
+**Checkpoint**: Production dropdowns working
+
+---
+
+## Phase 2: Dev Environment Setup
+
+**Purpose**: Configure development environment properly
+
+- [ ] T007 [DEV1] Verify .env has APP_ENV=dev
+- [ ] T008 [DEV1] Verify DynamoDB dev tables exist: UpApp.dev.users, UpApp.dev.forms
+- [ ] T009 [DEV1] Test local servers start and dropdowns load
+- [ ] T010 [DEV1] Update quickstart.md with dev setup instructions
+
+**Checkpoint**: Dev environment functional
+
+---
+
+## Phase 3: UAT Environment Setup
+
+**Purpose**: Configure UAT environment for testing
+
+- [ ] T011 [P] [UAT1] Create .env.uat template file
+- [ ] T012 [P] [UAT1] Document UAT setup in quickstart.md
+- [ ] T013 [UAT1] Verify DynamoDB UAT tables exist
+- [ ] T014 [UAT1] Test UAT environment and dropdowns
+
+**Checkpoint**: UAT environment functional
+
+---
+
+## Phase 4: Testing & Documentation
+
+**Purpose**: Add tests and complete documentation
+
+- [ ] T015 [P] [TEST1] Setup PHPUnit in backend/tests/
+- [ ] T016 [P] [TEST1] Write test for ReferenceHandler::getFeelings()
+- [ ] T017 [P] [TEST1] Write test for CollapsibleList component
+- [ ] T018 [P] Update README.md with troubleshooting
+- [ ] T019 Run full test suite
+
+---
+
+## Execution Order
+
+**Critical Path**: T001 → T004 → T005 → T006 (30 min to fix production)
+
+**Parallel After Phase 1**: DEV1 (T007-T010), UAT1 (T011-T014), TEST1 (T015-T019) can all run in parallel
+
+**Total Time**: 35 min (production fix) + 3 hours (environments & tests)
+
+---
+
+**Total Tasks**: 19 | **MVP**: Phase 1 only (fix production)
 
 **Input**: Design documents from `specs/001-project-foundation/`
 
